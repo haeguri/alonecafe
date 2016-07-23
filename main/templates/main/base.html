@@ -1,0 +1,35 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+{#    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">#}
+    <link rel="stylesheet" href="{% static 'lib/materialize.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}"/>
+</head>
+<body>
+     <nav class="nav-color">
+        <div class="nav-wrapper">
+          <a href="{% url 'main:cafe_list' %}" class="brand-logo center coffee-font">나 혼자 간다</a>
+{#          <ul id="nav-mobile" class="left hide-on-med-and-down">#}
+{#            <li><a href="sass.html">Sass</a></li>#}
+{#            <li><a href="badges.html">Components</a></li>#}
+{#            <li><a href="collapsible.html">JavaScript</a></li>#}
+{#          </ul>#}
+        </div>
+    </nav>
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div>
+    <footer class="page-footer">
+        <div class="footer-copyright">
+            <div class="container">© 2016 Copyright 나혼자간다</div>
+          </div>
+    </footer>
+    <script src="{% static 'lib/jquery.min.js' %}"></script>
+    <script src="{% static 'lib/materialize.min.js' %}"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBU0ue26PPSyRbzXGwmWu8HLeGM77Z4Ko8&language=ko" type="text/javascript"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>

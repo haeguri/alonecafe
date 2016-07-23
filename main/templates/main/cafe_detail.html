@@ -1,0 +1,65 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+    <div class="detail-container">
+        <div class="row">
+            <div class="col s12 m4 l7">
+                <div class="card">
+                    <div class="card-image">
+                        <img src="{{ cafe.photos.all.0.image.url }}" alt=""/>
+                    </div>
+                </div>
+                <div class="card-panel cafe-intro">
+                    <span>{{ cafe.intro }}</span>a
+                </div>
+            </div>
+            <div class="col s12 m8 l4">
+                <div class="card-panel cafe-info">
+                    {% if cafe.has_solo_table %}
+                        <span class="cafe-tag">1인석 있음</span>
+                    {% endif %}
+                    <br/>
+                    <div class="card-title">
+                        <h5>{{ cafe.name }}</h5>
+                    </div>
+                    <hr/>
+                    <div class="card-content">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td><i class="material-icons">location_on</i></td>
+                                    <td colspan="2">{{ cafe.address }}</td>
+                                </tr>
+                                <tr>
+                                    <span class="hidden-data" id="cafe-latitude">{{ cafe.position.latitude }}</span>
+                                    <span class="hidden-data" id="cafe-longitude">{{ cafe.position.longitude }}</span>
+                                    <div id="map">
+                                    </div>
+                                </tr>
+                                <tr>
+                                    <td><i class="material-icons">hearing</i></td>
+                                    <td colspan="2">{{ cafe.mood }}</td>
+                                </tr>
+                                <tr>
+                                    <td><i class="material-icons">schedule</i></td>
+                                    <td>평일</td>
+                                    <td>{{ cafe.week_hours }}</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>토요일</td>
+                                    <td>{{ cafe.satur_hours }}</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>토요일</td>
+                                    <td>{{ cafe.sun_hours }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

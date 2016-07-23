@@ -1,0 +1,36 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<div class="thumb-container">
+    {% for cafe in cafes %}
+        {% if forloop.first %}
+            <div class="row">
+        {% endif %}
+                <a href="{% url 'main:cafe_detail' cafe.id %}">
+                    <div class="col s12 m6 l4">
+                        <div class="card">
+                            <div class="card-image">
+                                <img src="{{ cafe.photos.all.0.image.url }}">
+                            </div>
+                            <div class="card-content">
+                                <div class="card-title activator grey-text text-darken-4">{{ cafe.name }}</div>
+                                <span>{{ cafe.region }}</span>
+                                {% if cafe.has_solo_table %}
+                                <span class="cafe-tag">
+                                    1인석 있음
+                                </span>
+                            {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </a>
+        {% if forloop.counter|divisibleby:3 %}
+            </div>
+            <div class="row">
+        {% endif %}
+        {% if forloop.last %}
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
+{% endblock %}
