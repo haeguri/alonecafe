@@ -45,6 +45,14 @@ footer .container {
     padding: 20px;
 }
 
+<<<<<<< HEAD
+=======
+.thumb-container .card-image img{
+    overflow: hidden;
+    min-height: 200px;
+}
+
+>>>>>>> 363061f1a16a235979f6983c553a68a8775c6afc
 .thumb-container .card-title {
     font-size: 20px;
 }
