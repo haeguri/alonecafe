@@ -1,0 +1,23 @@
+{
+  "name": "cafealone",
+  "homepage": "https://github.com/pacebook/alonecafe",
+  "authors": [
+    "pacebook <haegyun821@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery":"",
+    "materialize": "",
+    "material-design-icons": ""
+  }
+}

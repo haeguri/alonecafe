@@ -4,9 +4,11 @@
     $('.hidden-data').each(function(){
         if ($(this).attr('id') == 'cafe-latitude') {
             cafe_pos['lat'] = parseFloat($(this).text());
+            console.log("cafe_pos['lat']", cafe_pos['lat'])
         }
         else if ($(this).attr('id') == 'cafe-longitude') {
             cafe_pos['lng'] = parseFloat($(this).text());
+            console.log("cafe_pos['lng']", cafe_pos['lng'])
         }
     });
 
@@ -17,6 +19,6 @@
 
     var marker = new google.maps.Marker({
         position: cafe_pos,
-        map: map,
+        map: map
     });
 })();
