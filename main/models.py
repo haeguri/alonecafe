@@ -1,6 +1,10 @@
 from django.db import models
 from django.utils import timezone
 from geoposition.fields import GeopositionField
+from PIL import Image
+
+
+IMAGE_SIZE = (1536, 1028)
 
 def get_upload_path(instance, filename):
     return instance.cafe.region.city + "/" + instance.cafe.region.ward + "/" + instance.cafe.name + timezone.now().strftime("/%y-%m-%d/") + filename
@@ -33,8 +37,19 @@ class CafePhoto(models.Model):
     image = models.ImageField(upload_to=get_upload_path)
 
     def delete(self, *args, **kwargs):
-        self.image.delete()
+        try:
+            self.image.delete()
+        except:
+            print("이미 파일이 삭제 됐습니다.")
+
         super(CafePhoto, self).delete(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        super(CafePhoto, self).save(**kwargs)
+        image = Image.open(self.image)
+        image = image.resize(IMAGE_SIZE, Image.ANTIALIAS)
+        image.save(self.image.path)
+
 
 
 

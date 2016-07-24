@@ -1,46 +1,5 @@
-@font-face {
-    font-family: 'Material Icons';
-    font-style: normal;
-    font-weight: 400;
-    src: url('../lib/font/MaterialIcons-Regular.eot');
-    src: local('Material Icons'),
-         local('MaterialIcons-Regular'),
-         url('../lib/font/MaterialIcons-Regular.woff2') format('woff2');
-         url('../lib/font/MaterialIcons-Regular.woff') format('woff');
-         url("../lib/font/MaterialIcons-Regular.ttf") format('truetype'),
-}
-
-.material-icons {
-  font-family: 'Material Icons';
-  font-weight: normal;
-  font-style: normal;
-  font-size: 24px;  /* Preferred icon size */
-  display: inline-block;
-  line-height: 1;
-  text-transform: none;
-  letter-spacing: normal;
-  word-wrap: normal;
-  white-space: nowrap;
-  direction: ltr;
-  /* Support for all WebKit browsers. */
-  -webkit-font-smoothing: antialiased;
-  /* Support for Safari and Chrome. */
-  text-rendering: optimizeLegibility;
-  /* Support for Firefox. */
-  -moz-osx-font-smoothing: grayscale;
-  /* Support for IE. */
-  font-feature-settings: 'liga';
-}
-
 a{
     color: inherit;
-}
-
-.thumb-container {
-    border: solid 1px #e2e2e2;
-    margin-top: 5px;
-    background-color: #fff;
-    padding: 20px;
 }
 
 .nav-color {
@@ -67,6 +26,7 @@ footer .container {
     border: none;
 }
 
+
 .cafe-tag {
     background-color: #6F4E37;
     font-weight: 500;
@@ -76,6 +36,22 @@ footer .container {
     -webkit-border-radius: 20px;
     -moz-border-radius: 20px;
     border-radius: 20px;
+}
+
+.thumb-container {
+    border: solid 1px #e2e2e2;
+    margin-top: 5px;
+    background-color: #fff;
+    padding: 20px;
+}
+
+.thumb-container .card-image img{
+    overflow: hidden;
+    min-height: 200px;
+}
+
+.thumb-container .card-title {
+    font-size: 20px;
 }
 
 .thumb-container .cafe-tag {
@@ -90,16 +66,16 @@ footer .container {
     padding-top: 10px;
 }
 
-.cafe-intro {
+.detail-container .cafe-intro {
     padding-left: 30px;
     padding-right: 30px;
 }
 
-.hidden-data {
+.detail-container .hidden-data {
     display: none;
 }
 
-#map {
+.detail-container #map {
     width: 100%;
     height: 300px;
 }
