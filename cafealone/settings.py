@@ -102,7 +102,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-GEOPOSITION_GOOGLE_MAPS_API_KEY = 'AIzaSyBU0ue26PPSyRbzXGwmWu8HLeGM77Z4Ko8'
+GEOPOSITION_GOOGLE_MAPS_API_KEY = ''
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
