@@ -3,4 +3,5 @@ bower_components
 __pycache__
 db.sqlite3
 .idea
+envset.sh
 upload_files

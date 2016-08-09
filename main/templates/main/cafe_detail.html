@@ -1,12 +1,18 @@
 {% extends 'main/base.html' %}
 
+{% load main_tags %}
+
 {% block content %}
     <div class="detail-container">
         <div class="row">
             <div class="col s12 m12 l7">
                 <div class="card">
                     <div class="card-image">
-                        <img src="{{ cafe.photos.all.0.image.url }}" alt=""/>
+                        {% detail_image %}
+{#                        <img src="{{ cafe.photos.all.0.image.url }}" alt=""/>#}
+{#                        <div>#}
+{#                            <h1></h1>#}
+{#                        </div>#}
                     </div>
                 </div>
                 <div class="card-panel cafe-intro">

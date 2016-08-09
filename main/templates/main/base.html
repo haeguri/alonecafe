@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load main_tags %}
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -6,6 +7,7 @@
     <link rel="stylesheet" href="{% static 'Materialize/dist/css/materialize.css' %}"/>
     <link rel="stylesheet" href="{% static 'material-design-icons/iconfont/material-icons.css' %}"/>
     <link rel="stylesheet" href="{% static 'css/style.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/custom_tags.css' %}"/>
 </head>
 <body>
      <nav class="nav-color">
@@ -25,13 +27,12 @@
     <footer class="page-footer">
         <div class="footer-copyright">
             <div class="container">© 2016 Copyright 나혼자간다</div>
-          </div>
+        </div>
     </footer>
+
     <script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
     <script src="{% static 'Materialize/dist/js/materialize.js'%}"></script>
-    <!--
-    <script src="https://maps.googleapis.com/maps/api/js?key=[api_key]&language=ko"></script>
-    -->
+    <script src="https://maps.googleapis.com/maps/api/js?key={% get_api_key 'GOOGLE_MAP_KEY' %}&language=ko"></script>
     <script src="{% static 'js/script.js' %}"></script>
 </body>
 </html>
