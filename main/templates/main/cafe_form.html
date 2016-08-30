@@ -1,0 +1,16 @@
+{% extends 'main/base.html' %}
+{% load main_tags %}
+
+{% block content %}
+{#    <h5>카페 포토 폼.</h5>#}
+{#    {{ cafephoto_form.as_p }}#}
+{#    <h5>카페 위치 폼.</h5>#}
+{#    {{ cafepos_form.as_p }}#}
+    <h5>카페 메인 폼.</h5>
+    {% for field in cafe_form %}
+        <div class="input-field">
+            {{ field }} {{ field.label_tag }}
+        </div>
+    {% endfor %}
+{% endblock %}
+

@@ -1,5 +1,20 @@
-(function() {
+
+$(document).ready(function() {
     var cafe_pos = {};
+
+    function mapInitialize() {
+        var mapOptions = {
+            center: {lat: cafe_pos['lat'], lng: cafe_pos['lng']},
+            zoom: 15
+        };
+
+        var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+        //var marker = new google.maps.Marker({
+        //    position: cafe_pos,
+        //    map: map
+        //});
+    }
 
     $('.hidden-data').each(function(){
         if ($(this).attr('id') == 'cafe-latitude') {
@@ -38,13 +53,10 @@
         });
     });
 
-    var map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: cafe_pos['lat'], lng: cafe_pos['lng']},
-        zoom: 15
-    });
 
-    var marker = new google.maps.Marker({
-        position: cafe_pos,
-        map: map
-    });
-})();
+    // materialize select 박스 활성화
+    $('select').material_select();
+
+    google.maps.event.addDomListener(window, "load", mapInitialize);
+
+});

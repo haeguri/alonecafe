@@ -2,6 +2,10 @@ a{
     color: inherit;
 }
 
+label.required {
+    color: #ff4d4d;
+}
+
 .nav-color {
     background-color: #ffffef !important;
 }
@@ -78,4 +82,15 @@ footer .container {
 .detail-container #map {
     width: 100%;
     height: 300px;
+}
+
+.content-top {
+    margin-top: 20px;
+    display: inline-block;
+    width: 100%;
+}
+
+.cafe-new.btn {
+    display: inline;
+    float: right;
 }
