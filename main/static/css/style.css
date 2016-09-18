@@ -94,3 +94,25 @@ footer .container {
     display: inline;
     float: right;
 }
+
+.cafe-form {
+    margin-top: 50px;
+}
+
+.cafe-form .check-input + label {
+    margin-bottom: 30px;
+}
+
+.detail-more-btn {
+    border: none;
+    background: none;
+    padding: 10px;
+}
+
+.detail-more-btn:active {
+    background: none;
+}
+
+.detail-more-btn:focus {
+    background: none;
+}

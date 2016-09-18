@@ -2,15 +2,23 @@
 {% load main_tags %}
 
 {% block content %}
-{#    <h5>카페 포토 폼.</h5>#}
-{#    {{ cafephoto_form.as_p }}#}
-{#    <h5>카페 위치 폼.</h5>#}
-{#    {{ cafepos_form.as_p }}#}
-    <h5>카페 메인 폼.</h5>
-    {% for field in cafe_form %}
-        <div class="input-field">
-            {{ field }} {{ field.label_tag }}
+    <h5>새로운 카페를 소개해주세요.</h5>
+    <form class="cafe-form" action="{% url 'main:cafe_new' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <button type="submit">카페등록하기</button>
+        <h5>카페 포토 폼셋</h5>
+        {{ cafephoto_formset }}
+        <h5>카페 메인 폼.</h5>
+        {% for field in cafe_form %}
+            <div class="input-field">
+                {{ field }} {{ field.label_tag }}
+            </div>
+        {% endfor %}
+        <div class="detail-more">
+            <button type="button" class="detail-more-btn">더 자세한 정보를 적어주세요.<i class="fa fa-arrow-down" aria-hidden="true"></i></button>
         </div>
-    {% endfor %}
+        <h5>카페 포지션 폼셋 </h5>
+        {{ cafepos_formset  }}
+    </form>
 {% endblock %}
 

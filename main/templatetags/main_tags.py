@@ -10,6 +10,7 @@ def get_api_key(service):
         key = os.environ['GOOGLE_MAP_KEY']
     else:
         key = ''
+
     return key
 
 @register.inclusion_tag('tags/cafe_detail_tag.html', takes_context=True)

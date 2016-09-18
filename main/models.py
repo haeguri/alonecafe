@@ -1,13 +1,15 @@
 from django.db import models
 from django.utils import timezone
 from geoposition.fields import GeopositionField
+from django.core.urlresolvers import reverse_lazy
+
 from PIL import Image
 
 
 IMAGE_SIZE = (1536, 1028)
 
 def get_upload_path(instance, filename):
-    return instance.cafe.region.city + "/" + instance.cafe.region.ward + "/" + instance.cafe.name + timezone.now().strftime("/%y-%m-%d/") + filename
+    return instance.cafe.region.city + "/" + instance.cafe.name + timezone.now().strftime("/%y-%m-%d/") + filename
 
 class Region(models.Model):
     city = models.CharField('광역시도', max_length=20)
@@ -22,15 +24,18 @@ class Cafe(models.Model):
     address = models.CharField('간략한 주소', max_length=10, blank=False, null=False)
     mood = models.CharField('분위기', max_length=10, blank=False, null=False)
     intro = models.TextField('간단소개', blank=False, null=False)
-    has_solo_table =  models.BooleanField('1인 테이블 유무', default=False, blank=True)
+    has_solo_table =  models.BooleanField('1인 테이블', default=False, blank=True)
     week_hours = models.CharField('평일 영업시간', max_length=20, null=True, blank=True)
     satur_hours = models.CharField('토요일 영업시간', max_length=20, null=True, blank=True)
     sun_hours = models.CharField('휴일 영업시간', max_length=20, null=True, blank=True)
-    created = models.DateTimeField('등록일')
+    created = models.DateTimeField('등록일', auto_now_add=True)
     # position = GeopositionField('까페 좌표')
 
     def __str__(self):
         return self.region.city + " " + self.name
+
+    def get_absolute_url(self):
+        return reverse_lazy('main:cafe_detail', kwargs={'pk':self.id})
 
 class CafePosition(models.Model):
     cafe = models.OneToOneField('Cafe', related_name='position')

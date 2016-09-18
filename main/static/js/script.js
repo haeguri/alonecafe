@@ -53,10 +53,44 @@ $(document).ready(function() {
         });
     });
 
-
     // materialize select 박스 활성화
     $('select').material_select();
 
     google.maps.event.addDomListener(window, "load", mapInitialize);
+
+
+    var bottom_down_icon;
+    var cur_angle;
+
+    function rotateLeft() {
+        cur_angle -= 3;
+        bottom_down_icon.css('transform', 'rotate(' + (cur_angle) + 'deg)');
+        if(cur_angle > -180) {
+            setTimeout(rotateLeft, 2);
+        }
+    }
+
+    function rotateRight() {
+        cur_angle -= 3;
+        bottom_down_icon.css('transform', 'rotate(' + (cur_angle) + 'deg)');
+        if(cur_angle > 0) {
+            setTimeout(rotateRight, 2);
+        }
+    }
+
+    $('button.detail-more-btn').click(function() {
+        if(bottom_down_icon == undefined) {
+            bottom_down_icon = $(this).find('i');
+        }
+        if($(this).hasClass('.clicked')) {
+            cur_angle = 180;
+            rotateRight();
+            $(this).removeClass('.clicked');
+        }else{
+            cur_angle = 0;
+            rotateLeft();
+            $(this).addClass('.clicked');
+        }
+    });
 
 });
