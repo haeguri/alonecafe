@@ -9,16 +9,29 @@
         <h5>카페 포토 폼셋</h5>
         {{ cafephoto_formset }}
         <h5>카페 메인 폼.</h5>
-        {% for field in cafe_form %}
+        {% for field in cafe_form.main_fields %}
             <div class="input-field">
                 {{ field }} {{ field.label_tag }}
             </div>
         {% endfor %}
         <div class="detail-more">
-            <button type="button" class="detail-more-btn">더 자세한 정보를 적어주세요.<i class="fa fa-arrow-down" aria-hidden="true"></i></button>
+            <button type="button" class="detail-more-btn">더 자세한 정보를 적어주세요.<i class="fa fa-arrow-down"></i></button>
+            <div class="hidden-section">
+                {% for field in cafe_form.toggle_hidden_fields %}
+                    <div class="input-field">
+                        {{ field }} {{ field.label_tag }}
+                    </div>
+                {% endfor %}
+                {% for form in cafepos_formset %}
+                    <div class="input-field">
+                        {{ form.latitude }} {{ form.latitude.label_tag }}
+                    </div>
+                    <div class="input-field">
+                        {{ form.longitude }} {{ form.longitude.label_tag }}
+                    </div>
+                {% endfor %}
+            </div>
         </div>
-        <h5>카페 포지션 폼셋 </h5>
-        {{ cafepos_formset  }}
     </form>
 {% endblock %}
 

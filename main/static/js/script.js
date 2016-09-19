@@ -63,7 +63,7 @@ $(document).ready(function() {
     var cur_angle;
 
     function rotateLeft() {
-        cur_angle -= 3;
+        cur_angle -= 5;
         bottom_down_icon.css('transform', 'rotate(' + (cur_angle) + 'deg)');
         if(cur_angle > -180) {
             setTimeout(rotateLeft, 2);
@@ -71,12 +71,34 @@ $(document).ready(function() {
     }
 
     function rotateRight() {
-        cur_angle -= 3;
+        cur_angle -= 5;
         bottom_down_icon.css('transform', 'rotate(' + (cur_angle) + 'deg)');
         if(cur_angle > 0) {
             setTimeout(rotateRight, 2);
         }
     }
+
+    function showSection() {
+        //var section_height = hidden_section.css('height') + 5;
+        var height = hidden_section.height();
+        hidden_section.css('height', (height+inc_height)+'px');
+        if(height < origin_height ) {
+            setTimeout(showSection, 2);
+        }
+    }
+
+    function hideSection() {
+        var height = hidden_section.height();
+        hidden_section.css('height', (height-inc_height)+'px');
+        if(height > 0 ) {
+            setTimeout(hideSection, 2);
+        }
+    }
+
+    var hidden_section = $('.detail-more .hidden-section');
+    var origin_height = hidden_section.height();
+    var inc_height = origin_height/10;
+    hidden_section.css('height', '0px');
 
     $('button.detail-more-btn').click(function() {
         if(bottom_down_icon == undefined) {
@@ -85,10 +107,13 @@ $(document).ready(function() {
         if($(this).hasClass('.clicked')) {
             cur_angle = 180;
             rotateRight();
+            hideSection();
             $(this).removeClass('.clicked');
         }else{
             cur_angle = 0;
             rotateLeft();
+            showSection();
+            $("html, body").animate({ scrollTop: $(document).height() }, 500);
             $(this).addClass('.clicked');
         }
     });

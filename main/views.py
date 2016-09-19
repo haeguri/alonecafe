@@ -3,13 +3,12 @@ from .models import *
 from .forms import *
 from django.forms import inlineformset_factory
 
-
 cafe_init_data = {
     'region': Region.objects.get(city="대구"),
     'name': '테스트 카페',
     'address': '테스트 주소',
     'mood': '테스트 분위기',
-    'intro': '테스트 간략한 주소..',
+    'intro': '테스트 간략한 설명..',
     'has_solo_table': True
 }
 

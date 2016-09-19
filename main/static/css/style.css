@@ -54,6 +54,10 @@ footer .container {
     min-height: 200px;
 }
 
+.detail-container .card-image img {
+    min-height: 300px;
+}
+
 .thumb-container .card-title {
     font-size: 20px;
 }
@@ -115,4 +119,8 @@ footer .container {
 
 .detail-more-btn:focus {
     background: none;
+}
+
+.hidden-section {
+    overflow: hidden;
 }
