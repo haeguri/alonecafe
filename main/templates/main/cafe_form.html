@@ -6,9 +6,21 @@
     <form class="cafe-form" action="{% url 'main:cafe_new' %}" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <button type="submit">카페등록하기</button>
-        <h5>카페 포토 폼셋</h5>
-        {{ cafephoto_formset }}
-        <h5>카페 메인 폼.</h5>
+        <h5>카페의 이미지</h5>
+        <div class="cafephoto-preview">
+            {% for cafephoto_form in cafephoto_formset %}
+                <div class="cafephoto-label">
+                    {{ cafephoto_form.image.label_tag }}
+                </div>
+            {% endfor %}
+        </div>
+        <div class="cafephoto-input hidden">
+            {% for cafephoto_form in cafephoto_formset %}
+                {{ cafephoto_form.image }}
+            {% endfor %}
+        </div>
+        {{ cafephoto_formset.management_form }}
+        <h5>필수 정보</h5>
         {% for field in cafe_form.main_fields %}
             <div class="input-field">
                 {{ field }} {{ field.label_tag }}
@@ -30,6 +42,9 @@
                         {{ form.longitude }} {{ form.longitude.label_tag }}
                     </div>
                 {% endfor %}
+                <div>
+                    {{ cafepos_formset.management_form }}
+                </div>
             </div>
         </div>
     </form>

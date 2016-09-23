@@ -28,7 +28,7 @@ def cafe_detail(request, pk):
     return render(request, 'main/cafe_detail.html', {'cafe': cafe})
 
 def cafe_new(request):
-    CafePhotoFormSet = inlineformset_factory(Cafe, CafePhoto, fields=('cafe', 'image',), can_delete=False, extra=6)
+    CafePhotoFormSet = inlineformset_factory(Cafe, CafePhoto, fields=('cafe', 'image',), labels={'image':''}, can_delete=False, extra=3)
     CafePositionFormSet = inlineformset_factory(Cafe, CafePosition, fields=('latitude', 'longitude',), can_delete=False, extra=1)
 
     if request.method == 'POST':
@@ -58,8 +58,11 @@ def cafe_new(request):
         cafephoto_formset = CafePhotoFormSet()
         cafepos_formset = CafePositionFormSet()
 
-        for cafe in cafepos_formset.forms:
-            cafe.initial = cafepos_init_data
+        for cafephoto in cafephoto_formset:
+            print("Cafephoto is ", type(cafephoto))
+
+        for cafepos in cafepos_formset.forms:
+            cafepos.initial = cafepos_init_data
 
         cafe_form = CafeForm(initial=cafe_init_data)
 

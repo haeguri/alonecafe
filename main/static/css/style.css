@@ -54,9 +54,9 @@ footer .container {
     min-height: 200px;
 }
 
-.detail-container .card-image img {
-    min-height: 300px;
-}
+/*.detail-container .card-image img {*/
+    /*min-height: 300px;*/
+/*}*/
 
 .thumb-container .card-title {
     font-size: 20px;
@@ -121,6 +121,37 @@ footer .container {
     background: none;
 }
 
+.hidden {
+    display: none;
+}
+
 .hidden-section {
     overflow: hidden;
+}
+
+.cafephoto-label {
+    float: left;
+    width: 300px;
+    height: 200px;
+    border: solid 1px #e2e2e2;
+}
+
+.cafephoto-label label {
+    width: 100%;
+    height: inherit;
+    display: block;
+    background-image: url("../imgs/imgframe.png");
+    background-repeat: no-repeat;
+    background-size: 30%;
+    background-position: center;
+}
+
+.img-loaded label{
+    -webkit-background-size: 100%;
+    /*background-size: 100%;*/
+    background-size: cover;
+}
+
+.cafephoto-preview {
+    display: inline-block;
 }

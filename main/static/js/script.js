@@ -79,7 +79,6 @@ $(document).ready(function() {
     }
 
     function showSection() {
-        //var section_height = hidden_section.css('height') + 5;
         var height = hidden_section.height();
         hidden_section.css('height', (height+inc_height)+'px');
         if(height < origin_height ) {
@@ -117,5 +116,33 @@ $(document).ready(function() {
             $(this).addClass('.clicked');
         }
     });
+
+    var cafephoto_labels = $('.cafephoto-preview .cafephoto-label');
+
+    $('.cafephoto-input.hidden input').each(function(input_idx) {
+        $(this).on('change', function(arg){
+           console.log("IMAGE UPLOADED ! ARG is" , arg);
+            if(window.FileReader) {
+                if (!$(this)[0].files[0].type.match(/image\//)) return;
+
+                var reader = new FileReader();
+
+                reader.onload = function(e) {
+                    var src = e.target.result;
+
+                    changePreviewImg(input_idx, src);
+                };
+
+                reader.readAsDataURL($(this)[0].files[0]);
+            }
+        });
+    });
+
+    function changePreviewImg(input_idx, src){
+        if(!$(cafephoto_labels[input_idx]).hasClass('img-loaded'))
+            $(cafephoto_labels[input_idx]).addClass('img-loaded');
+
+        $(cafephoto_labels[input_idx]).find('label').css('background-image', 'url("'+src+'")');
+    }
 
 });
