@@ -19,7 +19,7 @@ class Region(models.Model):
         # return self.city + " " + self.ward
 
 class Cafe(models.Model):
-    region = models.ForeignKey(Region)
+    region = models.ForeignKey(Region, help_text='지역')
     name = models.CharField('까페 이름', max_length=20, blank=False, null=False)
     address = models.CharField('간략한 주소', max_length=10, blank=False, null=False)
     mood = models.CharField('분위기', max_length=10, blank=False, null=False)

@@ -3,48 +3,58 @@
 
 {% block content %}
     <h5>새로운 카페를 소개해주세요.</h5>
-    <form class="cafe-form" action="{% url 'main:cafe_new' %}" method="POST" enctype="multipart/form-data">
+    <form class="form-horizontal" action="{% url 'main:cafe_new' %}" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        <button type="submit">카페등록하기</button>
-        <h5>카페의 이미지</h5>
-        <div class="cafephoto-preview">
-            {% for cafephoto_form in cafephoto_formset %}
-                <div class="cafephoto-label">
-                    {{ cafephoto_form.image.label_tag }}
-                </div>
-            {% endfor %}
-        </div>
-        <div class="cafephoto-input hidden">
-            {% for cafephoto_form in cafephoto_formset %}
-                {{ cafephoto_form.image }}
-            {% endfor %}
-        </div>
-        {{ cafephoto_formset.management_form }}
-        <h5>필수 정보</h5>
-        {% for field in cafe_form.main_fields %}
-            <div class="input-field">
-                {{ field }} {{ field.label_tag }}
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-default">카페 등록하기</button>
             </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2">카페 사진</label>
+            <div class="cafephoto-preview">
+                {% for cafephoto_form in cafephoto_formset %}
+                    <div class="cafephoto-label">
+                        {{ cafephoto_form.image.label_tag }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+{#        <div class="cafephoto-input hidden">#}
+{#            {% for cafephoto_form in cafephoto_formset %}#}
+{#                {{ cafephoto_form.image }}#}
+{#            {% endfor %}#}
+{#        </div>#}
+{#        {{ cafephoto_formset.management_form }}#}
+{#        <h5>필수 정보</h5>#}
+        {% for field in cafe_form.required_fields %}
+{#            {% if field.field.required %}#}
+                <div class="form-group">
+                    <label for="id_{{ field.name }}" class="col-sm-2 control-label">{{ field.label }}</label>
+                    <div class="col-sm-10">{{ field }}</div>
+                </div>
+{#            {% endif %}#}
         {% endfor %}
+{##}
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <div class="checkbox">
+                    <label for="id_{{cafe_form.has_solo_table.name}}">
+                        <input type="checkbox">1인좌석 여부?
+                    </label>
+                </div>
+            </div>
+        </div>
+
         <div class="detail-more">
             <button type="button" class="detail-more-btn">더 자세한 정보를 적어주세요.<i class="fa fa-arrow-down"></i></button>
             <div class="hidden-section">
                 {% for field in cafe_form.toggle_hidden_fields %}
-                    <div class="input-field">
-                        {{ field }} {{ field.label_tag }}
+                    <div class="form-group">
+                        <label for="id_{{ field.name }}" class="col-sm-2 control-label">{{ field.label }}</label>
+                        <div class="col-sm-10">{{ field }}</div>
                     </div>
                 {% endfor %}
-                {% for form in cafepos_formset %}
-                    <div class="input-field">
-                        {{ form.latitude }} {{ form.latitude.label_tag }}
-                    </div>
-                    <div class="input-field">
-                        {{ form.longitude }} {{ form.longitude.label_tag }}
-                    </div>
-                {% endfor %}
-                <div>
-                    {{ cafepos_formset.management_form }}
-                </div>
             </div>
         </div>
     </form>

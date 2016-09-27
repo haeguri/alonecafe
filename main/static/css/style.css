@@ -2,8 +2,25 @@ a{
     color: inherit;
 }
 
+#map {
+    width: 100%;
+    height: 300px;
+}
+
+@media (min-width: 992px) {
+    .container {
+        width: 900px;
+    }
+}
+
+@media (min-width: 850px) {
+    .modal-dialog {
+        width: 750px;
+    }
+}
+
 label.required {
-    color: #ff4d4d;
+    /*color: #ff4d4d;*/
 }
 
 .nav-color {
@@ -42,51 +59,128 @@ footer .container {
     border-radius: 20px;
 }
 
-.thumb-container {
+#cafeDetailModal .left-section, #cafeDetailModal .right-section{
+    border: solid 1px #c2c2c2;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.detail-imgarea {
+    position: relative;
+}
+
+.modal-header .modal-title {
+    display: inline-block;
+}
+
+.detail-imgarea #cafe-img{
+    width: 100%;
+    height: auto;
+    display: block;
+    -webkit-border-radius: inherit;
+    -moz-border-radius: inherit;
+    border-radius: inherit;
+}
+
+.other-imgs-wrapper {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+}
+
+.other-imgs-wrapper .img {
+    margin-right: 5px;
     border: solid 1px #e2e2e2;
-    margin-top: 5px;
-    background-color: #fff;
+    float: left;
+    display: inline;
+    width: 20% !important;
+    height: 10%;
+}
+
+.detail-textarea {
     padding: 20px;
 }
 
-.thumb-container .card-image img{
-    overflow: hidden;
-    min-height: 200px;
+
+.detail-titlearea h5{
+    display: inline-block;
 }
 
-/*.detail-container .card-image img {*/
-    /*min-height: 300px;*/
+.detail-subinfoarea table{
+    width: 100%;
+}
+
+.detail-subinfoarea td > i {
+    margin-left: 10px;
+}
+
+.detail-subinfoarea td {
+    padding: 6px 0;
+}
+
+.tlabel {
+    padding-left: 10px !important;
+}
+
+
+/*.thumb-container {*/
+    /*border: solid 1px #e2e2e2;*/
+    /*margin-top: 5px;*/
+    /*background-color: #fff;*/
+    /*padding: 20px;*/
 /*}*/
 
-.thumb-container .card-title {
-    font-size: 20px;
+/*.thumb-container .card-image img{*/
+    /*overflow: hidden;*/
+    /*min-height: 200px;*/
+/*}*/
+
+/*/!*.detail-container .card-image img {*!/*/
+    /*/!*min-height: 300px;*!/*/
+/*/!*}*!/*/
+
+/*.thumb-container .card-title {*/
+    /*font-size: 20px;*/
+/*}*/
+
+/*.thumb-container .cafe-tag {*/
+    /*float: right;*/
+/*}*/
+
+.subinfo {
+    margin-top: 20px;
+    margin-bottom: 10px;
 }
 
-.thumb-container .cafe-tag {
+.subinfo .cafe-tag {
     float: right;
 }
 
-.detail-container .cafe-tag {
+
+
+
+
+#cafeDetailModal .cafe-tag {
     float: left;
 }
 
-.detail-container .card-title {
+#cafeDetailModal .card-title {
     padding-top: 10px;
 }
 
-.detail-container .cafe-intro {
+#cafeDetailModal .cafe-intro {
     padding-left: 30px;
     padding-right: 30px;
 }
 
-.detail-container .hidden-data {
+#detail-container .hidden-data {
     display: none;
 }
 
-.detail-container #map {
-    width: 100%;
-    height: 300px;
-}
+
+
 
 .content-top {
     margin-top: 20px;

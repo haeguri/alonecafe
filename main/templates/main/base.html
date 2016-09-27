@@ -4,22 +4,20 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="{% static 'Materialize/dist/css/materialize.css' %}"/>
-    <link rel="stylesheet" href="{% static 'material-design-icons/iconfont/material-icons.css' %}"/>
+{#    <link rel="stylesheet" href="{% static 'Materialize/dist/css/materialize.css' %}"/>#}
+{#    <link rel="stylesheet" href="{% static 'material-design-icons/iconfont/material-icons.css' %}"/>#}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="{% static 'css/style.css' %}"/>
-    <link rel="stylesheet" href="{% static 'css/custom_tags.css' %}"/>
 </head>
 <body>
-     <nav class="nav-color">
-        <div class="nav-wrapper">
-          <a href="{% url 'main:cafe_list' %}" class="brand-logo center coffee-font">나 혼자 간다</a>
-{#          <ul id="nav-mobile" class="left hide-on-med-and-down">#}
-{#            <li><a href="sass.html">Sass</a></li>#}
-{#            <li><a href="badges.html">Components</a></li>#}
-{#            <li><a href="collapsible.html">JavaScript</a></li>#}
-{#          </ul>#}
-        </div>
+    <nav class="navbar navbar-default">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <a href="{% url 'main:cafe_list' %}" class="navbar-brand coffee-font">나 혼자 간다</a>
+            </div>
+        </div><!-- /.container-fluid -->
     </nav>
     <div class="container">
         {% block content %}
@@ -32,8 +30,10 @@
     </footer>
 
     <script src="{% static 'jquery/dist/jquery.js' %}"></script>
-    <script src="{% static 'Materialize/dist/js/materialize.js'%}"></script>
+{#    <script src="{% static 'Materialize/dist/js/materialize.js'%}"></script>#}
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key={% get_api_key 'GOOGLE_MAP_KEY' %}&language=ko"></script>
     <script src="{% static 'js/script.js' %}"></script>
+
 </body>
 </html>
