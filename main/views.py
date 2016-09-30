@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from .models import *
 from .forms import *
 from django.forms import inlineformset_factory
+from django.http import HttpResponse
+import json
 
 cafe_init_data = {
     'region': Region.objects.get(city="대구"),
@@ -26,31 +28,6 @@ def cafe_detail(request, pk):
 
     cafe = Cafe.objects.get(pk=pk)
 
-    if len(cafe.photos.all()) != 0:
-        img = cafe.photos.all()[0].image.url
-    else:
-        img = ''
-
-        """
-        region = models.ForeignKey(Region)
-    name = models.CharField('까페 이름', max_length=20, blank=False, null=False)
-    address = models.CharField('간략한 주소', max_length=10, blank=False, null=False)
-    mood = models.CharField('분위기', max_length=10, blank=False, null=False)
-    intro = models.TextField('간단소개', blank=False, null=False)
-    has_solo_table =  models.BooleanField('1인 테이블', default=False, blank=True)
-    week_hours = models.CharField('평일 영업시간', max_length=20, null=True, blank=True)
-    satur_hours = models.CharField('토요일 영업시간', max_length=20, null=True, blank=True)
-    sun_hours = models.CharField('휴일 영업시간', max_length=20, null=True, blank=True)
-    created = models.DateTimeField('등록일', auto_now_add=True)
-
-        """
-
-    # context = {
-    #     'img':img,
-    #     'img_list':[photo.image.url for photo in cafe.photos.all()[:]],
-    #     'cafe':cafe
-    # }
-
     response_data = {
         'region':cafe.region.city,
         'img_list':[cafe_photo.image.url  for cafe_photo in cafe.photos.all()],
@@ -70,18 +47,8 @@ def cafe_detail(request, pk):
     except:
         response_data['pos'] = ''
 
-    import json
-    from django.http import HttpResponse
-
     return HttpResponse(json.dumps(response_data), content_type="application/json", charset="utf-8")
 
-    # return render(request, '', context)
-
-
-
-
-
-    # return render(request, 'main/cafe_detail.html', context)
 
 def cafe_new(request):
     CafePhotoFormSet = inlineformset_factory(Cafe, CafePhoto, fields=('cafe', 'image',), labels={'image':''}, can_delete=False, extra=3)

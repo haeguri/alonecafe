@@ -84,19 +84,19 @@ footer .container {
     border-radius: inherit;
 }
 
-.other-imgs-wrapper {
+.detail-other-imgarea {
     position: absolute;
-    bottom: 10px;
-    left: 10px;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(0,0,0,0.2);
 }
 
-.other-imgs-wrapper .img {
-    margin-right: 5px;
+.detail-other-imgarea img {
+    margin: 5px 5px;
     border: solid 1px #e2e2e2;
-    float: left;
-    display: inline;
     width: 20% !important;
     height: 10%;
+    float: right;
 }
 
 .detail-textarea {
@@ -113,6 +113,7 @@ footer .container {
 }
 
 .detail-subinfoarea td > i {
+    margin-right: 10px;
     margin-left: 10px;
 }
 
@@ -121,7 +122,7 @@ footer .container {
 }
 
 .tlabel {
-    padding-left: 10px !important;
+
 }
 
 

@@ -1,80 +1,17 @@
 {% extends 'main/base.html' %}
 {% load staticfiles %}
-{#                                {% if cafe.photos.all|length != 0 %}#}
-{#                                    <img class="cur-img" src="{{ cafe.photos.all.0.image.url }}" alt=""/>#}
-{#                                    <div class="other-imgs-wrapper">#}
-{#                                        {% for photo in cafe.photos.all %}#}
-{#                                            <img class="img" src="{{photo.image.url}}" alt=""/>#}
-{#                                        {% endfor %}#}
-{#                                    </div>#}
-{#                                {% else %}#}
-{#                                    <img class="cur-img" src="{% static 'imgs/no_img.png' %}" alt=""/>#}
-{#                                {% endif %}#}
+{#{% if cafe.photos.all|length != 0 %}#}
+{#    <img class="cur-img" src="{{ cafe.photos.all.0.image.url }}" alt=""/>#}
+{#    <div class="other-imgs-wrapper">#}
+{#        {% for photo in cafe.photos.all %}#}
+{#            <img class="img" src="{{photo.image.url}}" alt=""/>#}
+{#        {% endfor %}#}
+{#    </div>#}
+{#{% else %}#}
+{#    <img class="cur-img" src="{% static 'imgs/no_img.png' %}" alt=""/>#}
+{#{% endif %}#}
 {% block content %}
     <div class="content-top">
-        <!-- Modal -->
-        <div class="modal fade" id="cafeDetailModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                  <h4 class="modal-title" id="cafe-name"></h4>
-                  <span class="cafe-tag">1인석 있음</span>
-              </div>
-              <div class="modal-body">
-                    <div class="row">
-                        <div class="left-section col-sm-12 col-md-6 col-lg-7">
-                            <div class="detail-imgarea">
-                                <img id="cafe-img" src="" alt=""/>
-                            </div>
-                            <div class="detail-textarea">
-                                <p id="cafe-intro"></p>
-                            </div>
-                        </div>
-                        <div class="right-section col-sm-12 col-md-6 col-lg-5">
-                            <div class="detail-subinfoarea">
-                                <table>
-                                    <tbody>
-                                        <tr>
-                                            <td class="tlabel" colspan="3">위치<i class="fa fa-map-marker" aria-hidden="true"></i></td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="3">
-                                                <div id="map"></div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="tlabel">주소<i class="fa fa-tag" aria-hidden="true"></i></td>
-                                            <td colspan="2"><span id="cafe-address"></span></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="tlabel">분위기<i class="fa fa-volume-down" aria-hidden="true"></i></td>
-                                            <td colspan="2"><span id="cafe-mood"></span></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="tlabel">영업시간<i class="fa fa-clock-o" aria-hidden="true"></i></td>
-                                            <td>평일</td>
-                                            <td><span id="cafe-weekhours"></span></td>
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                            <td>토요일</td>
-                                            <td><span id="cafe-saturhours"></span></td>
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                            <td>일요일</td>
-                                            <td><span id="cafe-sunhours"></span></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-              </div>
-            </div>
-          </div>
         <a href="{% url 'main:cafe_new' %}" class="btn btn-default cafe-new">카페추천</a>
     </div>
     <div class="content-middle">
@@ -83,7 +20,6 @@
                 {% if forloop.first %}
                     <div class="row">
                 {% endif %}
-{#                    <a href="{% url 'main:cafe_detail' cafe.id %}">#}
                     <a class="cafe-thumbnail" data-id="{{ cafe.id }}">
                         <div class="col-sm-12 col-md-6 col-lg-4">
                             <div class="thumbnail">
@@ -93,7 +29,6 @@
                                     <img src="{% static 'imgs/no_img.png' %}">
                                 {% endif %}
                                 <div class="caption">
-{#                                    <div class="card-title activator grey-text text-darken-4">{{ cafe.name }}</div>#}
                                     <h3>{{ cafe.name }}</h3>
                                     <div class="subinfo">
                                         <span>{{ cafe.region }}</span>
@@ -116,4 +51,70 @@
         </div>
     </div>
 
+    <!-- 카페 상세 Modal -->
+    <div class="modal fade" id="cafeDetailModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="cafe-name"></h4>
+              <span class="cafe-tag">1인석 있음123</span>
+          </div>
+          <div class="modal-body">
+                <div class="row">
+                    <div class="left-section col-sm-12 col-md-6 col-lg-7">
+                        <div class="detail-imgarea">
+                            <img id="cafe-img" src="" alt=""/>
+                            <div class="detail-other-imgarea">
+                            </div>
+                        </div>
+                        <div class="detail-textarea">
+                            <p id="cafe-intro"></p>
+                        </div>
+                    </div>
+                    <div class="right-section col-sm-12 col-md-6 col-lg-5">
+                        <div class="detail-subinfoarea">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td class="tlabel" colspan="3"><i class="fa fa-map-marker" aria-hidden="true"></i>위치</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">
+                                            <div id="map"></div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="tlabel"><i class="fa fa-tag" aria-hidden="true"></i>주소</td>
+                                        <td colspan="2"><span id="cafe-address"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="tlabel"><i class="fa fa-volume-down" aria-hidden="true"></i>분위기</td>
+                                        <td colspan="2"><span id="cafe-mood"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="tlabel"><i class="fa fa-clock-o" aria-hidden="true"></i>영업시간</td>
+                                        <td>평일</td>
+                                        <td><span id="cafe-week_hours"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>토요일</td>
+                                        <td><span id="cafe-satur_hours"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>일요일</td>
+                                        <td><span id="cafe-sun_hours"></span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <!-- 카페 상세 Modal 끝 -->
 {% endblock %}

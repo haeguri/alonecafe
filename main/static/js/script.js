@@ -1,4 +1,3 @@
-
 $(document).ready(function() {
     'use strict';
 
@@ -16,11 +15,6 @@ $(document).ready(function() {
         map = new google.maps.Map(document.getElementById('map'), mapOptions);
     }
 
-    //google.maps.event.addListenerOnce(map, 'dile', function() {
-    //    google.maps.event.trigger(map, 'resize');
-    //    map.setCenter(cafe_pos);
-    //});
-
     google.maps.event.addDomListener(window, "load", mapInitialize);
 
     $('.hidden-data').each(function(){
@@ -34,51 +28,56 @@ $(document).ready(function() {
         }
     });
 
-    var cur_img = $('.cur-img')[0];
+    var cur_img = $('#cafe-img');
 
     function fade_in(){
-        cur_img.style.opacity = parseFloat(cur_img.style.opacity) + 0.05;
-        if (cur_img.style.opacity < 1) {
+        cur_img.css('opacity', parseFloat(cur_img.css('opacity'))+0.05);
+        if (cur_img.css('opacity') < 1) {
             setTimeout(fade_in, 50);
         }
     }
 
-    function fade_out() {
-        cur_img.style.opacity = parseFloat(cur_img.style.opacity) - 0.05;
-        if (cur_img.style.opacity > 0) {
-            setTimeout(fade_out, 50);
-        }
-    }
-
-    $('.other-imgs-wrapper img').each(function() {
-        $(this).click(function() {
-            cur_img.src = $(this).attr('src');
-            cur_img.addEventListener("load", function() {
-                cur_img.style.opacity = 0;
-                fade_in();
+    function addListenerToImg () {
+        $('.detail-other-imgarea img').each(function() {
+            $(this).click(function() {
+                cur_img.css('opacity', 0);
+                cur_img.attr('src', $(this).attr('src'));
+                cur_img.on('load', function() {
+                    fade_in();
+                });
             });
         });
-    });
+    }
 
     $('.cafe-thumbnail').each(function() {
         $(this).click(function() {
             var cafe_id = $(this).attr('data-id');
             $.get( "/cafe/"+cafe_id, function( response ) {
-                console.log("response is..", response);
+                console.log("/cafe/[cafe_id] get success.. ", response);
+
                 $('#cafeDetailModal').modal('show');
 
                 $('#cafe-name').text(response.name);
+                $('#cafe-intro').text(response.intro);
+                $('#cafe-mood').text(response.mood);
+                $('#cafe-address').text(response.address);
 
-                if (response.img_list.length != 0) {
+                if (response.img_list.length !== 0) {
                     $('#cafe-img').attr('src', response.img_list[0]);
+
+                    $('.detail-other-imgarea').empty();
+
+                    console.log("response.img_list.length is", response.img_list.length);
+                    for(var i = 0; i < response.img_list.length; i ++) {
+                        console.log(response.img_list[i]);
+                        $('.detail-other-imgarea').append('<img src="'+response.img_list[i]+'" alt="" />');
+                    }
+
+                    addListenerToImg();
                 }
                 else {
                     $('#cafe-img').attr('src', '../static/imgs/no_img.png');
                 }
-
-                $('#cafe-intro').text(response.intro);
-                $('#cafe-mood').text(response.mood);
-                $('#cafe-address').text(response.address);
 
                 if(response.has_solo_table === 'true') {
                     $('#myModal').find('.cafe-tag').css('display', 'inline-block');
@@ -87,39 +86,28 @@ $(document).ready(function() {
                     $('#myModal').find('cafe-tag').css('display', 'none');
                 }
 
+                var op_times = ['week_hours', 'satur_hours', 'sun_hours'];
+
+                for(var i = 0; i < op_times.length; i++) {
+                    if (response[op_times[i]].length !== 0) {
+                        $('#cafe-'+op_times[i]).text(response[op_times[i]]);
+                    }
+                    else {
+                        $('#cafe-'+op_times[i]).text('모름');
+                    }
+                }
+
                 //cafe_pos['lat'] = parseFloat(response.pos.split(",")[0]);
                 //cafe_pos['lng'] = parseFloat(response.pos.split(",")[1]);
 
-                if(response.week_hours.length != 0) {
-                    $('#cafe-weekhours').text(response.week_hours);
-                    console.log("Yes");
-                } else {
-                    $('#cafe-weekhours').text('모름');
-                    console.log("No");
-                }
-
-                if(response.satur_hours.length != 0) {
-                    $('#cafe-saturhours').text(response.satur_hours);
-                } else {
-                    $('#cafe-saturhours').text('모름');
-                }
-
-                if(response.sun_hours.length != 0) {
-                    $('#cafe-sunhours').text(response.week_hours);
-                } else {
-                    $('#cafe-sunhours').text('모름');
-                }
-
-                mapInitialize();
-
-            }).fail(function() {
-                console.log("Failed");
+            }).fail(function(error) {
+                console.log("/cafe/[cafe_id] get faield !!", error);
             });
         })
     });
 
     $('#cafeDetailModal').on('shown.bs.modal', function() {
-        console.log("Trigger");
+        // Modal뜨면 지도가 완벽하게 안나와서 한번 resizing 필요.
         google.maps.event.trigger(map, "resize");
     });
 
