@@ -20,16 +20,12 @@ class Region(models.Model):
 
 class Cafe(models.Model):
     region = models.ForeignKey(Region, help_text='지역')
-    name = models.CharField('까페 이름', max_length=20, blank=False, null=False)
+    name = models.CharField('카페 이름', max_length=20, blank=False, null=False)
     address = models.CharField('간략한 주소', max_length=10, blank=False, null=False)
     mood = models.CharField('분위기', max_length=10, blank=False, null=False)
-    intro = models.TextField('간단소개', blank=False, null=False)
+    intro = models.TextField('추천이유', blank=False, null=False)
     has_solo_table =  models.BooleanField('1인 테이블', default=False, blank=True)
-    week_hours = models.CharField('평일 영업시간', max_length=20, null=True, blank=True)
-    satur_hours = models.CharField('토요일 영업시간', max_length=20, null=True, blank=True)
-    sun_hours = models.CharField('휴일 영업시간', max_length=20, null=True, blank=True)
     created = models.DateTimeField('등록일', auto_now_add=True)
-    # position = GeopositionField('까페 좌표')
 
     def __str__(self):
         return self.region.city + " " + self.name

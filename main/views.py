@@ -11,7 +11,7 @@ cafe_init_data = {
     'address': '테스트 주소',
     'mood': '테스트 분위기',
     'intro': '테스트 간략한 설명..',
-    'has_solo_table': True
+    'has_solo_table': 'true'
 }
 
 cafepos_init_data = {
@@ -36,10 +36,10 @@ def cafe_detail(request, pk):
         'mood':cafe.mood,
         'intro':cafe.intro,
         'has_solo_table':cafe.has_solo_table,
-        'week_hours':cafe.week_hours,
-        'satur_hours':cafe.satur_hours,
-        'sun_hours':cafe.sun_hours,
-        'created':cafe.created.strftime("%y-%m-%d"),
+        # 'week_hours':cafe.week_hours,
+        # 'satur_hours':cafe.satur_hours,
+        # 'sun_hours':cafe.sun_hours,
+        # 'created':cafe.created.strftime("%y-%m-%d"),
     }
 
     try:
@@ -68,7 +68,7 @@ def cafe_new(request):
                 cafephoto_formset.save()
                 cafepos_formset.save()
 
-                return redirect(new_cafe.get_absolute_url())
+                return redirect('main:cafe_list')
 
             else:
                 print(cafephoto_formset.errors)

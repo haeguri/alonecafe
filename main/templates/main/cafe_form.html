@@ -2,61 +2,97 @@
 {% load main_tags %}
 
 {% block content %}
-    <h5>새로운 카페를 소개해주세요.</h5>
     <form class="form-horizontal" action="{% url 'main:cafe_new' %}" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-default">카페 등록하기</button>
-            </div>
+            <button type="submit" class="pull-right btn btn-primary">카페 등록하기</button>
         </div>
+        <!-- 카페 사진 폼셋 -->
         <div class="form-group">
-            <label class="col-sm-2">카페 사진</label>
-            <div class="cafephoto-preview">
+            <label class="col-sm-2 control-label">카페 사진</label>
+            <div class="cafephoto-preview col-sm-10">
                 {% for cafephoto_form in cafephoto_formset %}
-                    <div class="cafephoto-label">
+                    <div class="label-wrapper">
                         {{ cafephoto_form.image.label_tag }}
+                        <div class="gray-box"></div>
+                        <i class="fa fa-times fa-2x" aria-hidden="true"></i>
+                        {{ cafephoto_form.image }}
                     </div>
                 {% endfor %}
+{#                <div class="hidden">#}
+{#                <div class="">#}
+{#                    {% for cafephoto_form in cafephoto_formset %}#}
+{#                        {{ cafephoto_form.image }}#}
+{#                    {% endfor %}#}
+{#                </div>#}
+            </div>
+            {{ cafephoto_formset.management_form }}
+        </div>
+
+        <div style="height: 100px; width: 200px;">
+
+        </div>
+        <!-- 카페의 지역 -->
+        <div class="form-group">
+            <label for="id_{{ cafe_form.region.name }}" class="col-sm-2 control-label">{{ cafe_form.region.label }}</label>
+            <div class="col-sm-10">
+                {{ cafe_form.region }}
             </div>
         </div>
-{#        <div class="cafephoto-input hidden">#}
-{#            {% for cafephoto_form in cafephoto_formset %}#}
-{#                {{ cafephoto_form.image }}#}
-{#            {% endfor %}#}
-{#        </div>#}
-{#        {{ cafephoto_formset.management_form }}#}
-{#        <h5>필수 정보</h5>#}
-        {% for field in cafe_form.required_fields %}
-{#            {% if field.field.required %}#}
-                <div class="form-group">
-                    <label for="id_{{ field.name }}" class="col-sm-2 control-label">{{ field.label }}</label>
-                    <div class="col-sm-10">{{ field }}</div>
+        <!-- 카페 상호 -->
+        <div class="form-group">
+            <label for="id_{{ cafe_form.name.name }}" class="col-sm-2 control-label">{{ cafe_form.name.label }}</label>
+            <div class="col-sm-10">
+                <input id="id_{{ cafe_form.name.name }}" name="{{ cafe_form.name.name }}" value="{{ cafe_form.name.value }}"class="form-control" type="text"/>
+            </div>
+        </div>
+        <!-- 카페 분위기 -->
+        <div class="form-group">
+            <label for="id{{ cafe_form.mood.name }}" class="col-sm-2 control-label">{{ cafe_form.mood.label }}</label>
+            <div class="col-sm-10">
+                <input id="id_{{ cafe_form.mood.name }}" name="{{ cafe_form.mood.name }}" value="{{ cafe_form.mood.value }}" class="form-control" type="text"/>
+            </div>
+        </div>
+        <!-- 카페 주소 + Google map-->
+        <div class="form-group">
+            <label for="id{{ cafe_form.address.name }}" class="col-sm-2 control-label">{{ cafe_form.address.label }}</label>
+            <div class="col-sm-10">
+                <input id="id_{{ cafe_form.address.name }}" name="{{ cafe_form.address.name }}" value="{{ cafe_form.address.value }}" class="form-control" type="text"/>
+            </div>
+        </div>
+        <!-- 카페 자랑, TextArea -->
+        <div>
+            <div class="form-group">
+                <label for="id{{ cafe_form.intro.name }}" class="col-sm-2 control-label">{{ cafe_form.intro.label }}</label>
+                <div class="col-sm-10">
+                    <textarea class="form-control" name="{{ cafe_form.intro.name }}" id="id_{{ cafe_form.intro.name }}" rows="5">{{ cafe_form.intro.value }}</textarea>
                 </div>
-{#            {% endif %}#}
-        {% endfor %}
-{##}
+            </div>
+        </div>
+        <!-- 카페의 1인좌석 여부 ? -->
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <div class="checkbox">
                     <label for="id_{{cafe_form.has_solo_table.name}}">
-                        <input type="checkbox">1인좌석 여부?
+                        <input type="checkbox" name="{{ cafe_form.has_solo_table.name }}" id="id_{{ cafe_form.has_solo_table.name }}">1인좌석 여부?
                     </label>
                 </div>
             </div>
         </div>
 
-        <div class="detail-more">
-            <button type="button" class="detail-more-btn">더 자세한 정보를 적어주세요.<i class="fa fa-arrow-down"></i></button>
-            <div class="hidden-section">
-                {% for field in cafe_form.toggle_hidden_fields %}
-                    <div class="form-group">
-                        <label for="id_{{ field.name }}" class="col-sm-2 control-label">{{ field.label }}</label>
-                        <div class="col-sm-10">{{ field }}</div>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
+        {{ cafepos_formset.management_form }}
+{#        {% for field in cafe_form.required_fields %}#}
+{#            <div class="form-group">#}
+{#                <label for="id_{{ field.name }}" class="col-sm-2 control-label">{{ field.label }}</label>#}
+{#                <div class="col-sm-10">{{ field }}</div>#}
+{#            </div>#}
+{#        {% endfor %}#}
+        <div></div>
+{#        {% for field in cafe_form %}#}
+{##}
+{#            {{ field }}#}
+{##}
+{#        {% endfor %}#}
     </form>
 {% endblock %}
 

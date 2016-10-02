@@ -6,7 +6,8 @@ $(document).ready(function() {
         center: {lat: cafe_pos['lat'], lng: cafe_pos['lng']},
         zoom: 14
     };
-    var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+    var map = null;
+    //var map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
     function mapInitialize() {
         mapOptions['center']['lat'] = cafe_pos['lat'];
@@ -15,7 +16,7 @@ $(document).ready(function() {
         map = new google.maps.Map(document.getElementById('map'), mapOptions);
     }
 
-    google.maps.event.addDomListener(window, "load", mapInitialize);
+    //google.maps.event.addDomListener(window, "load", mapInitialize);
 
     $('.hidden-data').each(function(){
         if ($(this).attr('id') === 'cafe-latitude') {
@@ -79,22 +80,11 @@ $(document).ready(function() {
                     $('#cafe-img').attr('src', '../static/imgs/no_img.png');
                 }
 
-                if(response.has_solo_table === 'true') {
+                if(response.has_solo_table) {
                     $('#myModal').find('.cafe-tag').css('display', 'inline-block');
                 }
                 else {
                     $('#myModal').find('cafe-tag').css('display', 'none');
-                }
-
-                var op_times = ['week_hours', 'satur_hours', 'sun_hours'];
-
-                for(var i = 0; i < op_times.length; i++) {
-                    if (response[op_times[i]].length !== 0) {
-                        $('#cafe-'+op_times[i]).text(response[op_times[i]]);
-                    }
-                    else {
-                        $('#cafe-'+op_times[i]).text('모름');
-                    }
                 }
 
                 //cafe_pos['lat'] = parseFloat(response.pos.split(",")[0]);
@@ -107,73 +97,39 @@ $(document).ready(function() {
     });
 
     $('#cafeDetailModal').on('shown.bs.modal', function() {
+        mapInitialize();
         // Modal뜨면 지도가 완벽하게 안나와서 한번 resizing 필요.
         google.maps.event.trigger(map, "resize");
     });
 
-    var bottom_down_icon;
-    var cur_angle;
 
-    function rotateLeft() {
-        cur_angle -= 5;
-        bottom_down_icon.css('transform', 'rotate(' + (cur_angle) + 'deg)');
-        if(cur_angle > -180) {
-            setTimeout(rotateLeft, 2);
-        }
-    }
+    var cafephoto_labels = $('.cafephoto-preview label');
 
-    function rotateRight() {
-        cur_angle -= 5;
-        bottom_down_icon.css('transform', 'rotate(' + (cur_angle) + 'deg)');
-        if(cur_angle > 0) {
-            setTimeout(rotateRight, 2);
-        }
-    }
+    $('.label-wrapper').each(function() {
+        $(this).mouseenter(function(){
+            if ($(this).hasClass('img-loaded')) {
+                $(this).find('i').css('display','block');
+                $(this).find('.gray-box').css('display','block');
+            }
+        }).mouseleave(function() {
+            if ($(this).hasClass('img-loaded')) {
+                $(this).find('i').css('display','none');
+                $(this).find('.gray-box').css('display','none');
+            }
+        });
 
-    function showSection() {
-        var height = hidden_section.height();
-        hidden_section.css('height', (height+inc_height)+'px');
-        if(height < origin_height ) {
-            setTimeout(showSection, 2);
-        }
-    }
-
-    function hideSection() {
-        var height = hidden_section.height();
-        hidden_section.css('height', (height-inc_height)+'px');
-        if(height > 0 ) {
-            setTimeout(hideSection, 2);
-        }
-    }
-
-    var hidden_section = $('.detail-more .hidden-section');
-    var origin_height = hidden_section.height();
-    var inc_height = origin_height/10;
-    hidden_section.css('height', '0px');
-
-    $('button.detail-more-btn').click(function() {
-        if(bottom_down_icon === undefined) {
-            bottom_down_icon = $(this).find('i');
-        }
-        if($(this).hasClass('.clicked')) {
-            cur_angle = 180;
-            rotateRight();
-            hideSection();
-            $(this).removeClass('.clicked');
-        } else {
-            cur_angle = 0;
-            rotateLeft();
-            showSection();
-            $("html, body").animate({ scrollTop: $(document).height() }, 500);
-            $(this).addClass('.clicked');
-        }
+        $(this).find('i').on('click', function() {
+            $(this).parent().find('input').val('');
+            $(this).parent().find('label').css('background-image', '');
+            $(this).parent().removeClass('img-loaded');
+            $(this).css('display', 'none');
+            $(this).parent().find('.gray-box').css('display', 'none');
+        });
     });
 
-    var cafephoto_labels = $('.cafephoto-preview .cafephoto-label');
-
-    $('.cafephoto-input.hidden input').each(function(input_idx) {
+    $('.cafephoto-preview input').each(function(input_idx) {
         $(this).on('change', function(arg){
-           console.log("IMAGE UPLOADED ! ARG is" , arg);
+            console.log("IMAGE UPLOADED ! ARG is" , arg);
             if(window.FileReader) {
                 if (!$(this)[0].files[0].type.match(/image\//)) return;
 
@@ -191,11 +147,71 @@ $(document).ready(function() {
     });
 
     function changePreviewImg(input_idx, src){
-        if(!$(cafephoto_labels[input_idx]).hasClass('img-loaded')) {
-            $(cafephoto_labels[input_idx]).addClass('img-loaded');
+        console.log("label list is", cafephoto_labels);
+        console.log("input_idx is", input_idx);
+        if(!$(cafephoto_labels[input_idx]).parent().hasClass('img-loaded')) {
+            $(cafephoto_labels[input_idx]).parent().addClass('img-loaded');
         }
 
-        $(cafephoto_labels[input_idx]).find('label').css('background-image', 'url("'+src+'")');
+        $(cafephoto_labels[input_idx]).css('background-image', 'url("'+src+'")');
     }
+
+    //var bottom_down_icon;
+    //var cur_angle;
+    //
+    //function rotateLeft() {
+    //    cur_angle -= 5;
+    //    bottom_down_icon.css('transform', 'rotate(' + (cur_angle) + 'deg)');
+    //    if(cur_angle > -180) {
+    //        setTimeout(rotateLeft, 2);
+    //    }
+    //}
+    //
+    //function rotateRight() {
+    //    cur_angle -= 5;
+    //    bottom_down_icon.css('transform', 'rotate(' + (cur_angle) + 'deg)');
+    //    if(cur_angle > 0) {
+    //        setTimeout(rotateRight, 2);
+    //    }
+    //}
+    //
+    //function showSection() {
+    //    var height = hidden_section.height();
+    //    hidden_section.css('height', (height+inc_height)+'px');
+    //    if(height < origin_height ) {
+    //        setTimeout(showSection, 2);
+    //    }
+    //}
+    //
+    //function hideSection() {
+    //    var height = hidden_section.height();
+    //    hidden_section.css('height', (height-inc_height)+'px');
+    //    if(height > 0 ) {
+    //        setTimeout(hideSection, 2);
+    //    }
+    //}
+
+    //var hidden_section = $('.detail-more .hidden-section');
+    //var origin_height = hidden_section.height();
+    //var inc_height = origin_height/10;
+    //hidden_section.css('height', '0px');
+    //
+    //$('button.detail-more-btn').click(function() {
+    //    if(bottom_down_icon === undefined) {
+    //        bottom_down_icon = $(this).find('i');
+    //    }
+    //    if($(this).hasClass('.clicked')) {
+    //        cur_angle = 180;
+    //        rotateRight();
+    //        hideSection();
+    //        $(this).removeClass('.clicked');
+    //    } else {
+    //        cur_angle = 0;
+    //        rotateLeft();
+    //        showSection();
+    //        $("html, body").animate({ scrollTop: $(document).height() }, 500);
+    //        $(this).addClass('.clicked');
+    //    }
+    //});
 
 });

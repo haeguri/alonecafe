@@ -104,6 +104,8 @@ footer .container {
 }
 
 
+
+
 .detail-titlearea h5{
     display: inline-block;
 }
@@ -224,29 +226,53 @@ footer .container {
     overflow: hidden;
 }
 
-.cafephoto-label {
-    float: left;
-    width: 300px;
+.cafephoto-preview .label-wrapper {
+    width: 30%;
     height: 200px;
+    float: left;
     border: solid 1px #e2e2e2;
+    position: relative;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
 }
 
-.cafephoto-label label {
+.cafephoto-preview .label-wrapper i{
+    color: #fff;
+    display: none;
+}
+
+.cafephoto-preview .label-wrapper .gray-box {
+    display: none;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+/*.cafephoto-preview .label-wrapper.img-loaded i{*/
+    /*display: block;*/
+/*}*/
+
+.label-wrapper label {
+    z-index: 10;
     width: 100%;
     height: inherit;
-    display: block;
     background-image: url("../imgs/imgframe.png");
     background-repeat: no-repeat;
-    background-size: 30%;
+    background-size: 100%;
     background-position: center;
+}
+
+.label-wrapper i {
+    position: absolute;
+    top: 10px;
+    right: 10px;
 }
 
 .img-loaded label{
     -webkit-background-size: 100%;
     /*background-size: 100%;*/
     background-size: cover;
-}
-
-.cafephoto-preview {
-    display: inline-block;
 }
