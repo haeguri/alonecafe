@@ -1,19 +1,20 @@
 $(document).ready(function() {
     'use strict';
 
+    var map = null;
+    var marker = null;
+
     var cafe_pos = {'lat':37.541, 'lng':126.986};
     var mapOptions = {
         center: {lat: cafe_pos['lat'], lng: cafe_pos['lng']},
         zoom: 14
     };
-    var map = null;
-    //var map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
-    function mapInitialize() {
-        mapOptions['center']['lat'] = cafe_pos['lat'];
-        mapOptions['center']['lng'] = cafe_pos['lng'];
+    function mapInitialize(lat, lng) {
+        mapOptions['center']['lat'] = lat;
+        mapOptions['center']['lng'] = lng;
 
-        map = new google.maps.Map(document.getElementById('map'), mapOptions);
+        map = new google.maps.Map(document.getElementById('google-map'), mapOptions);
     }
 
     //google.maps.event.addDomListener(window, "load", mapInitialize);
@@ -56,8 +57,6 @@ $(document).ready(function() {
             $.get( "/cafe/"+cafe_id, function( response ) {
                 console.log("/cafe/[cafe_id] get success.. ", response);
 
-                $('#cafeDetailModal').modal('show');
-
                 $('#cafe-name').text(response.name);
                 $('#cafe-intro').text(response.intro);
                 $('#cafe-mood').text(response.mood);
@@ -68,9 +67,7 @@ $(document).ready(function() {
 
                     $('.detail-other-imgarea').empty();
 
-                    console.log("response.img_list.length is", response.img_list.length);
                     for(var i = 0; i < response.img_list.length; i ++) {
-                        console.log(response.img_list[i]);
                         $('.detail-other-imgarea').append('<img src="'+response.img_list[i]+'" alt="" />');
                     }
 
@@ -87,8 +84,10 @@ $(document).ready(function() {
                     $('#myModal').find('cafe-tag').css('display', 'none');
                 }
 
-                //cafe_pos['lat'] = parseFloat(response.pos.split(",")[0]);
-                //cafe_pos['lng'] = parseFloat(response.pos.split(",")[1]);
+                cafe_pos['lat'] = parseFloat(response.pos.split(",")[0]);
+                cafe_pos['lng'] = parseFloat(response.pos.split(",")[1]);
+
+                $('#cafeDetailModal').modal('show');
 
             }).fail(function(error) {
                 console.log("/cafe/[cafe_id] get faield !!", error);
@@ -97,11 +96,10 @@ $(document).ready(function() {
     });
 
     $('#cafeDetailModal').on('shown.bs.modal', function() {
-        mapInitialize();
+        mapInitialize(cafe_pos['lat'], cafe_pos['lng']);
         // Modal뜨면 지도가 완벽하게 안나와서 한번 resizing 필요.
         google.maps.event.trigger(map, "resize");
     });
-
 
     var cafephoto_labels = $('.cafephoto-preview label');
 
@@ -156,62 +154,100 @@ $(document).ready(function() {
         $(cafephoto_labels[input_idx]).css('background-image', 'url("'+src+'")');
     }
 
-    //var bottom_down_icon;
-    //var cur_angle;
-    //
-    //function rotateLeft() {
-    //    cur_angle -= 5;
-    //    bottom_down_icon.css('transform', 'rotate(' + (cur_angle) + 'deg)');
-    //    if(cur_angle > -180) {
-    //        setTimeout(rotateLeft, 2);
-    //    }
-    //}
-    //
-    //function rotateRight() {
-    //    cur_angle -= 5;
-    //    bottom_down_icon.css('transform', 'rotate(' + (cur_angle) + 'deg)');
-    //    if(cur_angle > 0) {
-    //        setTimeout(rotateRight, 2);
-    //    }
-    //}
-    //
-    //function showSection() {
-    //    var height = hidden_section.height();
-    //    hidden_section.css('height', (height+inc_height)+'px');
-    //    if(height < origin_height ) {
-    //        setTimeout(showSection, 2);
-    //    }
-    //}
-    //
-    //function hideSection() {
-    //    var height = hidden_section.height();
-    //    hidden_section.css('height', (height-inc_height)+'px');
-    //    if(height > 0 ) {
-    //        setTimeout(hideSection, 2);
-    //    }
-    //}
+    mapInitialize(cafe_pos['lat'], cafe_pos['lng']);
+    var geocoder = new google.maps.Geocoder();
 
-    //var hidden_section = $('.detail-more .hidden-section');
-    //var origin_height = hidden_section.height();
-    //var inc_height = origin_height/10;
-    //hidden_section.css('height', '0px');
-    //
-    //$('button.detail-more-btn').click(function() {
-    //    if(bottom_down_icon === undefined) {
-    //        bottom_down_icon = $(this).find('i');
-    //    }
-    //    if($(this).hasClass('.clicked')) {
-    //        cur_angle = 180;
-    //        rotateRight();
-    //        hideSection();
-    //        $(this).removeClass('.clicked');
-    //    } else {
-    //        cur_angle = 0;
-    //        rotateLeft();
-    //        showSection();
-    //        $("html, body").animate({ scrollTop: $(document).height() }, 500);
-    //        $(this).addClass('.clicked');
-    //    }
-    //});
+    $('.cafe-form').ready(function() {
+        var lat_input = $('#id_position-0-latitude');
+        var lng_input = $('#id_position-0-longitude');
+
+        console.log(lat_input);
+
+        marker = new google.maps.Marker({
+            position:mapOptions.center,
+            map: map,
+            draggable: true
+        });
+
+        marker.addListener('dragend', function(event) {
+            mapOptions['center']['lat'] = event.latLng.lat();
+            mapOptions['center']['lng'] = event.latLng.lng();
+            console.log(lat_input.val());
+            lat_input.val(mapOptions['center']['lat']);
+            lng_input.val(mapOptions['center']['lng']);
+            console.log(lat_input.val());
+
+            map.setCenter(mapOptions['center']);
+
+            geocoder.geocode({
+                'location':mapOptions['center']
+            }, function(result) {
+                console.log(result);
+
+                //result.geometry.location.lat()
+                $('#map-cur-address').text(result[0].formatted_address);
+            });
+        });
+
+        map.addListener('click', function(event) {
+            mapOptions['center']['lat']=event.latLng.lat();
+            mapOptions['center']['lng']=event.latLng.lng();
+            lat_input.val(mapOptions['center']['lat']);
+            lng_input.val(mapOptions['center']['lng']);
+
+            marker.setPosition(mapOptions['center']);
+            map.setCenter(mapOptions['center']);
+
+            geocoder.geocode({
+                'location':mapOptions['center']
+            }, function(result) {
+                if(result.length !== 0) {
+                    console.log(result);
+                    $('#map-cur-address').text(result[0].formatted_address);
+                } else {
+                    $('#map-cur-address').text("검색된 주소가 없음.");
+                }
+            });
+        });
+
+        geocoder.geocode({
+           'address':'서울특별시'
+        }, function(result) {
+            if(result.length !== 0) {
+                mapOptions['center']['lat']=result[0].geometry.location.lat();
+                mapOptions['center']['lng']=result[0].geometry.location.lng();
+                lat_input.val(mapOptions['center']['lat']);
+                lng_input.val(mapOptions['center']['lng']);
+
+                map.setCenter(mapOptions['center']);
+                marker.setPosition(mapOptions['center']);
+            } else {
+                console.log("검색된 좌표값이 없음.");
+            }
+        });
+
+
+        $('#map-search-btn').on('click', function() {
+            //console.log("$(this).siblings.val()", $(this).siblings().val());
+            //$(this).siblings().val()
+
+            geocoder.geocode({
+                'address':$(this).siblings().val()
+            }, function(result) {
+                if(result.length !== 0) {
+                    mapOptions['center']['lat']=result[0].geometry.location.lat();
+                    mapOptions['center']['lng']=result[0].geometry.location.lng();
+                    lat_input.val(""+mapOptions['center']['lat']);
+                    lng_input.val(""+mapOptions['center']['lng']);
+
+                    map.setCenter(mapOptions['center']);
+                    marker.setPosition(mapOptions['center']);
+                } else {
+                    console.log("검색된 좌표값이 없음.");
+                }
+            })
+        });
+    });
+
 
 });

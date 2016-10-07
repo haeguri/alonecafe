@@ -6,9 +6,9 @@ from django.http import HttpResponse
 import json
 
 cafe_init_data = {
-    'region': Region.objects.get(city="대구"),
+    # 'region': Region.objects.get(city="대구"),
     'name': '테스트 카페',
-    'address': '테스트 주소',
+    'address': '대구광역시 북구 구암동',
     'mood': '테스트 분위기',
     'intro': '테스트 간략한 설명..',
     'has_solo_table': 'true'
@@ -29,7 +29,7 @@ def cafe_detail(request, pk):
     cafe = Cafe.objects.get(pk=pk)
 
     response_data = {
-        'region':cafe.region.city,
+        # 'region':cafe.region.city,
         'img_list':[cafe_photo.image.url  for cafe_photo in cafe.photos.all()],
         'name':cafe.name,
         'address':cafe.address,

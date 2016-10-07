@@ -17,7 +17,7 @@ class CafePositionForm(forms.ModelForm):
         exclude = ('', )
 
 class CafeForm(forms.ModelForm):
-    region = forms.ModelChoiceField(label='지역', queryset=Region.objects.all(), widget=forms.Select(attrs={'class':'form-control'}))
+    # region = forms.ModelChoiceField(label='지역', queryset=Region.objects.all(), widget=forms.Select(attrs={'class':'form-control'}))
     # name = forms.CharField(label='카페이름', widget=forms.TextInput(attrs={'class':'form-control'}))
     intro = forms.CharField(label='카페소개', max_length=500, widget=forms.Textarea())
     # address = forms.CharField(label='간략한 주소', max_length=10, widget=forms.TextInput(attrs=({'class':'form-control'})))
@@ -26,14 +26,6 @@ class CafeForm(forms.ModelForm):
     # satur_hours  = forms.CharField(label='토요일 영업시간', required=False, widget=forms.TextInput(attrs=({'class':'form-control'})))
     # sun_hours  = forms.CharField(label='일요일 영업시간', required=False, widget=forms.TextInput(attrs=({'class':'form-control'})))
 
-
     class Meta:
         model = Cafe
-        # fields = ('region', 'intro', 'name', 'mood', )
         exclude = ('created',)
-
-    # def required_fields(self):
-    #     return [field for field in self if field.field.required and type(field.field.widget).__name__ != 'CheckboxInput']
-
-    # def no_required_fields(self):
-    #     return [field for field in self if not field.field.required]

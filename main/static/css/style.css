@@ -2,7 +2,7 @@ a{
     color: inherit;
 }
 
-#map {
+#google-map {
     width: 100%;
     height: 300px;
 }
@@ -19,12 +19,50 @@ a{
     }
 }
 
+.cafephoto-preview .label-wrapper {
+    width: 32%;
+    height: 100px;
+    float: left;
+    border: solid 1px #e2e2e2;
+    position: relative;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+}
+
+/*.cafephoto-preview input {*/
+    /*display: none;*/
+/*}*/
+
+@media (min-width: 600px) {
+    .cafephoto-preview .label-wrapper {
+        width: 32%;
+        height: 200px;
+        float: left;
+        border: solid 1px #e2e2e2;
+        position: relative;
+        -webkit-box-sizing: content-box;
+        -moz-box-sizing: content-box;
+        box-sizing: content-box;
+    }
+}
+
+
+
 label.required {
     /*color: #ff4d4d;*/
 }
 
-.nav-color {
-    background-color: #ffffef !important;
+.sbuck-bg {
+    background-color: #00592d !important;
+}
+
+.white-font {
+    color: #fff;
+}
+
+.navbar-brand:hover{
+    color: #fff;
 }
 
 .coffee-font {
@@ -226,16 +264,7 @@ footer .container {
     overflow: hidden;
 }
 
-.cafephoto-preview .label-wrapper {
-    width: 30%;
-    height: 200px;
-    float: left;
-    border: solid 1px #e2e2e2;
-    position: relative;
-    -webkit-box-sizing: content-box;
-    -moz-box-sizing: content-box;
-    box-sizing: content-box;
-}
+
 
 .cafephoto-preview .label-wrapper i{
     color: #fff;
@@ -275,4 +304,30 @@ footer .container {
     -webkit-background-size: 100%;
     /*background-size: 100%;*/
     background-size: cover;
+}
+
+
+.map-search-area input{
+    display: inline-block;
+    width: 70% !important;
+}
+
+.map-search-area button {
+    width: auto !important;
+}
+
+.cafe-form #google-map {
+    margin: 20px 0;
+    border: solid 1px #c2c2c2;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+
+}
+
+.help-text {
+    margin-top: 5px;
+    margin-bottom: 5px;
+
+    color: #808080;
 }

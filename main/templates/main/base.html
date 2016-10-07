@@ -9,12 +9,17 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}"/>
 </head>
 <body>
-    <nav class="navbar navbar-default">
+    <nav class="navbar sbuck-bg">
         <div class="container">
             <div class="navbar-header">
-                <a href="{% url 'main:cafe_list' %}" class="navbar-brand coffee-font">나 혼자 간다</a>
+                <a href="{% url 'main:cafe_list' %}" class="navbar-brand white-font">나 혼자 간다</a>
             </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="{% url 'main:cafe_new' %}" class="white-font">여 좋더라</a></li>
+                <li><a href="#" class="white-font">로그인</a></li>
+            </ul>
         </div>
+
     </nav>
     <div class="container">
         {% block content %}

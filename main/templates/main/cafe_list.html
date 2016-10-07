@@ -1,19 +1,10 @@
 {% extends 'main/base.html' %}
 {% load staticfiles %}
-{#{% if cafe.photos.all|length != 0 %}#}
-{#    <img class="cur-img" src="{{ cafe.photos.all.0.image.url }}" alt=""/>#}
-{#    <div class="other-imgs-wrapper">#}
-{#        {% for photo in cafe.photos.all %}#}
-{#            <img class="img" src="{{photo.image.url}}" alt=""/>#}
-{#        {% endfor %}#}
-{#    </div>#}
-{#{% else %}#}
-{#    <img class="cur-img" src="{% static 'imgs/no_img.png' %}" alt=""/>#}
-{#{% endif %}#}
+
 {% block content %}
-    <div class="content-top">
-        <a href="{% url 'main:cafe_new' %}" class="btn btn-default cafe-new">카페추천</a>
-    </div>
+{#    <div class="content-top">#}
+{#        #}
+{#    </div>#}
     <div class="content-middle">
         <div class="thumb-container">
             {% for cafe in cafes %}
@@ -30,12 +21,11 @@
                                 {% endif %}
                                 <div class="caption">
                                     <h3>{{ cafe.name }}</h3>
-                                    <div class="subinfo">
-                                        <span>{{ cafe.region }}</span>
-                                        {% if cafe.has_solo_table %}
-                                            <span class="cafe-tag">1인석 있음</span>
-                                        {% endif %}
-                                    </div>
+{#                                    <div class="subinfo">#}
+{#                                        {% if cafe.has_solo_table %}#}
+{#                                            <span class="cafe-tag">1인석 있음</span>#}
+{#                                        {% endif %}#}
+{#                                    </div>#}
                                 </div>
                             </div>
                         </div>
@@ -81,7 +71,7 @@
                                     </tr>
                                     <tr>
                                         <td colspan="3">
-                                            <div id="map"></div>
+                                            <div id="google-map"></div>
                                         </td>
                                     </tr>
                                     <tr>

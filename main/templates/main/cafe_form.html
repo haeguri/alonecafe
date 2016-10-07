@@ -2,11 +2,8 @@
 {% load main_tags %}
 
 {% block content %}
-    <form class="form-horizontal" action="{% url 'main:cafe_new' %}" method="POST" enctype="multipart/form-data">
+    <form class="form-horizontal cafe-form" action="{% url 'main:cafe_new' %}" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        <div class="form-group">
-            <button type="submit" class="pull-right btn btn-primary">카페 등록하기</button>
-        </div>
         <!-- 카페 사진 폼셋 -->
         <div class="form-group">
             <label class="col-sm-2 control-label">카페 사진</label>
@@ -32,13 +29,39 @@
         <div style="height: 100px; width: 200px;">
 
         </div>
-        <!-- 카페의 지역 -->
+        <!-- 카페 주소 + Google map-->
         <div class="form-group">
-            <label for="id_{{ cafe_form.region.name }}" class="col-sm-2 control-label">{{ cafe_form.region.label }}</label>
-            <div class="col-sm-10">
-                {{ cafe_form.region }}
+            <label for="id{{ cafe_form.address.name }}" class="col-sm-2 control-label">{{ cafe_form.address.label }}</label>
+            <div class="col-sm-10 map-search-area">
+                <input id="id_{{ cafe_form.address.name }}" name="{{ cafe_form.address.name }}" value="{{ cafe_form.address.value }}" class="form-control" type="text"/>
+                <button type="button" id="map-search-btn" class="btn btn-default">위치검색</button>
             </div>
+            <div class="col-sm-10 col-sm-offset-2">
+                <div class="help-text">
+                    <p>지도에서 선택된 주소 : <span id="map-cur-address"></span></p>
+                </div>
+                <div id="google-map">
+                </div>
+            </div>
+            <div style="display: none">
+                {% for form in cafepos_formset %}
+                    {% for field in form %}
+                        {{ field }}
+                    {% endfor %}
+                {% endfor %}
+            </div>
+            {{ cafepos_formset.management_form }}
+{#            <div class="col-sm-2">#}
+{#                <button id="map-search-btn">위치검색</button>#}
+{#            </div>#}
         </div>
+        <!-- 카페의 지역 -->
+{#        <div class="form-group">#}
+{#            <label for="id_{{ cafe_form.region.name }}" class="col-sm-2 control-label">{{ cafe_form.region.label }}</label>#}
+{#            <div class="col-sm-10">#}
+{#                {{ cafe_form.region }}#}
+{#            </div>#}
+{#        </div>#}
         <!-- 카페 상호 -->
         <div class="form-group">
             <label for="id_{{ cafe_form.name.name }}" class="col-sm-2 control-label">{{ cafe_form.name.label }}</label>
@@ -51,13 +74,6 @@
             <label for="id{{ cafe_form.mood.name }}" class="col-sm-2 control-label">{{ cafe_form.mood.label }}</label>
             <div class="col-sm-10">
                 <input id="id_{{ cafe_form.mood.name }}" name="{{ cafe_form.mood.name }}" value="{{ cafe_form.mood.value }}" class="form-control" type="text"/>
-            </div>
-        </div>
-        <!-- 카페 주소 + Google map-->
-        <div class="form-group">
-            <label for="id{{ cafe_form.address.name }}" class="col-sm-2 control-label">{{ cafe_form.address.label }}</label>
-            <div class="col-sm-10">
-                <input id="id_{{ cafe_form.address.name }}" name="{{ cafe_form.address.name }}" value="{{ cafe_form.address.value }}" class="form-control" type="text"/>
             </div>
         </div>
         <!-- 카페 자랑, TextArea -->
@@ -79,20 +95,9 @@
                 </div>
             </div>
         </div>
-
-        {{ cafepos_formset.management_form }}
-{#        {% for field in cafe_form.required_fields %}#}
-{#            <div class="form-group">#}
-{#                <label for="id_{{ field.name }}" class="col-sm-2 control-label">{{ field.label }}</label>#}
-{#                <div class="col-sm-10">{{ field }}</div>#}
-{#            </div>#}
-{#        {% endfor %}#}
-        <div></div>
-{#        {% for field in cafe_form %}#}
-{##}
-{#            {{ field }}#}
-{##}
-{#        {% endfor %}#}
+        <div class="form-group">
+            <button type="submit" class="pull-right btn btn-primary">카페 등록하기</button>
+        </div>
     </form>
 {% endblock %}
 

@@ -1,6 +1,5 @@
 from django.db import models
 from django.utils import timezone
-from geoposition.fields import GeopositionField
 from django.core.urlresolvers import reverse_lazy
 
 from PIL import Image
@@ -19,9 +18,9 @@ class Region(models.Model):
         # return self.city + " " + self.ward
 
 class Cafe(models.Model):
-    region = models.ForeignKey(Region, help_text='지역')
+    # region = models.ForeignKey(Region, help_text='지역')
     name = models.CharField('카페 이름', max_length=20, blank=False, null=False)
-    address = models.CharField('간략한 주소', max_length=10, blank=False, null=False)
+    address = models.CharField('간략한 주소', max_length=20, blank=False, null=False)
     mood = models.CharField('분위기', max_length=10, blank=False, null=False)
     intro = models.TextField('추천이유', blank=False, null=False)
     has_solo_table =  models.BooleanField('1인 테이블', default=False, blank=True)
