@@ -15,7 +15,7 @@
                 <a href="{% url 'main:cafe_list' %}" class="navbar-brand white-font">나 혼자 간다</a>
             </div>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="{% url 'main:cafe_new' %}" class="white-font">여 좋더라</a></li>
+                <li><a href="{% url 'main:cafe_new' %}" class="white-font">추천하기</a></li>
                 <li><a href="#" class="white-font">로그인</a></li>
             </ul>
         </div>
@@ -35,6 +35,5 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key={% get_api_key 'GOOGLE_MAP_KEY' %}&language=ko"></script>
     <script src="{% static 'js/script.js' %}"></script>
-
 </body>
 </html>

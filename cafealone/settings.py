@@ -76,6 +76,9 @@ WSGI_APPLICATION = 'cafealone.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
+AUTH_USER_MODEL = 'main.CustomUser'
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
