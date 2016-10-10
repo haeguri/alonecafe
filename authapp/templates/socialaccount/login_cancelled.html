@@ -1,0 +1,7 @@
+{% extends 'account/base.html' %}
+
+{% block auth_content %}
+    <h3>페이스북 로그인이 취소 됐습니다.</h3>
+    <a href="{% url 'account_login' %}">다시 로그인화면으로</a>
+
+{% endblock %}
