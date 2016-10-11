@@ -6,19 +6,27 @@
 
     {% get_providers as socialaccount_providers %}
 
-    <h3>로그인 후 카페추천!</h3>
+    {% if next %}
+        <h3>로그인 후 카페추천 !</h3>
+    {% else %}
+        <h3>로그인</h3>
+    {% endif %}
+
+    <hr/>
 
     <form action="{% url 'account_login' %}" method="post">
+        {% csrf_token %}
+        <div style="display: none"><input type="text" name="next" value="{{ next }}"/></div>
         <div class="form-group">
             <label for="email">이메일</label>
-            <input id="email" type="email" class="form-control" placeholder="">
+            <input id="email" name="username" type="email" class="form-control" placeholder="my_email@domain">
         </div>
         <div class="form-group">
             <label for="password">비밀번호</label>
-            <input id="password" type="password" class="form-control" placeholder="">
+            <input id="password" name="password" type="password" class="form-control" placeholder="password">
         </div>
         <button class="btn btn-default btn-lg btn-block" type="submit">로그인</button>
-        <a class="btn btn-default btn-lg btn-block" href="{% url 'account_signup' %}">이메일 회원가입</a>
+        <a class="btn btn-default btn-lg btn-block" href="{% url 'account_signup' %}">이메일로 회원가입</a>
         {% if socialaccount_providers %}
             <a class="btn btn-default btn-lg btn-block fblogin" href="{% provider_login_url "facebook" %}">Facebook 로그인</a>
         {% endif %}

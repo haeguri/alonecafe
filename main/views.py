@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect
 from .models import *
 from .forms import *
+from django.contrib.auth.decorators import login_required
 from django.forms import inlineformset_factory
 from django.http import HttpResponse
 import json
 
 cafe_init_data = {
-    # 'region': Region.objects.get(city="대구"),
     'name': '테스트 카페',
     'address': '대구광역시 북구 구암동',
     'mood': '테스트 분위기',
@@ -29,16 +29,13 @@ def cafe_detail(request, pk):
     cafe = Cafe.objects.get(pk=pk)
 
     response_data = {
-        # 'region':cafe.region.city,
+        'user':cafe.user.nickname,
         'img_list':[cafe_photo.image.url  for cafe_photo in cafe.photos.all()],
         'name':cafe.name,
         'address':cafe.address,
         'mood':cafe.mood,
         'intro':cafe.intro,
         'has_solo_table':cafe.has_solo_table,
-        # 'week_hours':cafe.week_hours,
-        # 'satur_hours':cafe.satur_hours,
-        # 'sun_hours':cafe.sun_hours,
         # 'created':cafe.created.strftime("%y-%m-%d"),
     }
 
@@ -49,7 +46,7 @@ def cafe_detail(request, pk):
 
     return HttpResponse(json.dumps(response_data), content_type="application/json", charset="utf-8")
 
-
+@login_required(login_url='/accounts/login')
 def cafe_new(request):
     CafePhotoFormSet = inlineformset_factory(Cafe, CafePhoto, fields=('cafe', 'image',), labels={'image':''}, can_delete=False, extra=3)
     CafePositionFormSet = inlineformset_factory(Cafe, CafePosition, fields=('latitude', 'longitude',), can_delete=False, extra=1)
@@ -83,6 +80,8 @@ def cafe_new(request):
 
         for cafepos in cafepos_formset.forms:
             cafepos.initial = cafepos_init_data
+
+        cafe_init_data['user'] = request.user
 
         cafe_form = CafeForm(initial=cafe_init_data)
 

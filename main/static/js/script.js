@@ -28,7 +28,7 @@ $(document).ready(function() {
         $(this).click(function() {
             var cafe_id = $(this).attr('data-id');
             $.get('/cafe/'+cafe_id, function( response ) {
-                //console.log("/cafe/[cafe_id] get success.. ", response);
+                console.log("/cafe/[cafe_id] get success.. ", response);
                 $('#cafe-name').text(response.name);
                 $('#cafe-intro').text(response.intro);
                 $('#cafe-mood').text(response.mood);

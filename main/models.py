@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.core.urlresolvers import reverse_lazy
+from authapp.models import CustomUser as User
 
 from PIL import Image
 
@@ -18,6 +19,7 @@ class Region(models.Model):
 
 class Cafe(models.Model):
     # region = models.ForeignKey(Region, help_text='지역')
+    user = models.ForeignKey(User, related_name='cafes', null=False, blank=False)
     name = models.CharField('카페 이름', max_length=20, blank=False, null=False)
     address = models.CharField('간략한 주소', max_length=20, blank=False, null=False)
     mood = models.CharField('분위기', max_length=10, blank=False, null=False)
@@ -26,7 +28,7 @@ class Cafe(models.Model):
     created = models.DateTimeField('등록일', auto_now_add=True)
 
     def __str__(self):
-        return self.region.city + " " + self.name
+        return self.name
 
     def get_absolute_url(self):
         return reverse_lazy('main:cafe_detail', kwargs={'pk':self.id})

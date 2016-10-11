@@ -23,6 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '3*32(&ke2=urql4l(_r0-vw=)+&*gnv=qo)m5)++l32wcd8zmh'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+
 DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -45,8 +46,6 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.facebook',
 ]
-
-SITE_ID = 1
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
@@ -83,11 +82,15 @@ AUTHENTICATION_BACKENDS = (
 )
 
 AUTH_USER_MODEL = 'authapp.CustomUser'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
-# all-auth package config
+# all-auth package configuration
+SITE_ID = 1
 ACCOUNT_USER_MODEL_USERNAME_FIELD = 'nickname'
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 WSGI_APPLICATION = 'cafealone.wsgi.application'
 
@@ -122,9 +125,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-GEOPOSITION_GOOGLE_MAPS_API_KEY = os.environ['GOOGLE_MAP_KEY']
-
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
@@ -152,3 +152,8 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/uploads/'
 
 MEDIA_ROOT = 'upload_files'
+
+try:
+    GEOPOSITION_GOOGLE_MAPS_API_KEY = os.environ['GOOGLE_MAP_KEY']
+except:
+    print("System environment variable 'GOOGLE_MAP_KEY' is required.")
