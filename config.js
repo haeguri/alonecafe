@@ -1,0 +1,1 @@
+var GOOGLE_MAP_KEY = '';
