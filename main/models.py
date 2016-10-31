@@ -18,13 +18,10 @@ class Region(models.Model):
         return self.city
 
 class Cafe(models.Model):
-    # region = models.ForeignKey(Region, help_text='지역')
     user = models.ForeignKey(User, related_name='cafes', null=False, blank=False)
     name = models.CharField('카페 이름', max_length=20, blank=False, null=False)
-    address = models.CharField('간략한 주소', max_length=20, blank=False, null=False)
-    mood = models.CharField('분위기', max_length=10, blank=False, null=False)
+    address = models.CharField('위치', max_length=50, blank=False, null=False)
     intro = models.TextField('추천이유', blank=False, null=False)
-    has_solo_table =  models.BooleanField('1인 테이블', default=False, blank=True)
     created = models.DateTimeField('등록일', auto_now_add=True)
 
     def __str__(self):
@@ -39,15 +36,14 @@ class CafePosition(models.Model):
     longitude = models.CharField('경도', max_length=50, blank=False, null=False)
 
 class CafePhoto(models.Model):
-    cafe = models.ForeignKey(Cafe, related_name='photos')
-    image = models.ImageField(upload_to=get_upload_path)
+    cafe = models.OneToOneField('Cafe', related_name='photo')
+    image = models.ImageField(upload_to=get_upload_path, blank=False, null=False)
 
     def delete(self, *args, **kwargs):
         try:
             self.image.delete()
         except:
             print("이미 파일이 삭제 됐습니다.")
-
         super(CafePhoto, self).delete(*args, **kwargs)
 
     def save(self, *args, **kwargs):

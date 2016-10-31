@@ -1,23 +1,8 @@
 from django.shortcuts import render, redirect
-from .models import *
 from .forms import *
 from django.contrib.auth.decorators import login_required
-from django.forms import inlineformset_factory
 from django.http import HttpResponse
 import json
-
-cafe_init_data = {
-    'name': '테스트 카페',
-    'address': '대구광역시 북구 구암동',
-    'mood': '테스트 분위기',
-    'intro': '테스트 간략한 설명..',
-    'has_solo_table': 'true'
-}
-
-cafepos_init_data = {
-    'latitude':'35.2',
-    'longitude':'23.5'
-}
 
 def cafe_list(request):
     cafes = Cafe.objects.all().order_by('-created')
@@ -25,70 +10,112 @@ def cafe_list(request):
     return render(request, 'main/cafe_list.html', {'cafes': cafes})
 
 def cafe_detail(request, pk):
-
     cafe = Cafe.objects.get(pk=pk)
 
     response_data = {
-        'user':cafe.user.nickname,
-        'img_list':[cafe_photo.image.url  for cafe_photo in cafe.photos.all()],
+        'id':cafe.id,
+        'user':cafe.user.id,
+        'img_list':[cafe.photo.image.url],
         'name':cafe.name,
         'address':cafe.address,
-        'mood':cafe.mood,
         'intro':cafe.intro,
-        'has_solo_table':cafe.has_solo_table,
-        # 'created':cafe.created.strftime("%y-%m-%d"),
+        'pos':cafe.position.latitude + "," + cafe.position.longitude
     }
-
-    try:
-        response_data['pos'] = cafe.position.latitude + ',' + cafe.position.longitude
-    except:
-        response_data['pos'] = ''
 
     return HttpResponse(json.dumps(response_data), content_type="application/json", charset="utf-8")
 
-@login_required(login_url='/accounts/login')
-def cafe_new(request):
-    CafePhotoFormSet = inlineformset_factory(Cafe, CafePhoto, fields=('cafe', 'image',), labels={'image':''}, can_delete=False, extra=3)
-    CafePositionFormSet = inlineformset_factory(Cafe, CafePosition, fields=('latitude', 'longitude',), can_delete=False, extra=1)
+@login_required(login_url=("/auth/login"))
+def cafe_edit(request, pk):
+    cafe = Cafe.objects.get(id=pk)
+    if cafe.user.id != request.user.id:
+        return redirect('main:cafe_list')
+    context = {}
 
-    if request.method == 'POST':
-        cafe_form = CafeForm(data=request.POST)
+    if request.method == 'GET':
+        cafe_form = CafeForm(initial={'user':request.user.id, 'name':cafe.name, 'intro':cafe.intro, 'address':cafe.address})
+        cafephoto_form = CafePhotoForm(initial={'cafe':cafe.id})
+        cafepos_form = CafePositionForm(initial={'cafe':cafe.id, 'latitude':cafe.position.latitude, 'longitude':cafe.position.longitude})
+
+        context['cafe_id'] = cafe.id
+        context['cafe_form'] = cafe_form
+        context['cafephoto_form'] = cafephoto_form
+        context['cafepos_form'] = cafepos_form
+    elif request.method == 'POST':
+        cafe_form = CafeForm(request.POST, instance=cafe)
 
         if cafe_form.is_valid():
+            cafe_form.save()
+            cafephoto_form = CafePhotoForm(request.POST, request.FILES, instance=CafePhoto.objects.get(cafe=cafe.id))
+            cafepos_form = CafePositionForm(request.POST, instance=CafePosition.objects.get(cafe=cafe.id))
 
-            new_cafe = cafe_form.save(commit=False)
-            cafephoto_formset = CafePhotoFormSet(request.POST, request.FILES, instance=new_cafe)
-            cafepos_formset = CafePositionFormSet(request.POST, request.FILES, instance=new_cafe)
-
-            if cafephoto_formset.is_valid() and cafepos_formset.is_valid():
-                new_cafe.save()
-                cafephoto_formset.save()
-                cafepos_formset.save()
-
+            if cafephoto_form.is_valid() and cafepos_form.is_valid():
+                cafephoto_form.save()
+                cafepos_form.save()
                 return redirect('main:cafe_list')
-
             else:
-                print(cafephoto_formset.errors)
-
+                context['cafe_form'] = cafe_form
+                if not cafephoto_form.is_valid():
+                    cafephoto_form.add_error(None, '이미지를 등록해주세요. ')
+                if not cafepos_form.is_valid():
+                    cafepos_form.add_error(None, '위치를 다시 확인해주세요.')
+                context['cafephoto_form'] = cafephoto_form
+                context['cafepos_form'] = cafepos_form
         else:
-            print("cafe_form is_valid is not true")
-            print(cafe_form.errors)
+            cafe_form.add_error(None, '정보를 확인해주세요 !')
+            context['cafe_form'] = cafe_form
+            context['cafephoto_form'] = CafePhotoForm()
+            context['cafepos_form'] = CafePositionForm()
 
+    context['cafe_id'] = cafe.id
+    context['cur_img'] = cafe.photo.image.url
+
+    return render(request, 'main/cafe_form.html', context)
+
+@login_required(login_url='/auth/login')
+def cafe_delete(request, pk):
+    cafe = Cafe.objects.get(id=pk)
+
+    if cafe.user.id == request.user.id:
+        cafe.delete()
+
+    return redirect('main:cafe_list')
+
+@login_required(login_url='/auth/login')
+def cafe_new(request):
+    context = {}
+    if request.method == 'GET':
+        context['cafe_form'] = CafeForm()
+        context['cafephoto_form'] = CafePhotoForm()
+        context['cafepos_form'] = CafePositionForm()
     else:
-        cafephoto_formset = CafePhotoFormSet()
-        cafepos_formset = CafePositionFormSet()
+        request.POST['user'] = request.user.id
+        cafe_form = CafeForm(request.POST)
 
-        for cafepos in cafepos_formset.forms:
-            cafepos.initial = cafepos_init_data
+        if cafe_form.is_valid():
+            new_cafe = cafe_form.save()
+            request.POST['cafe'] = new_cafe.id
+            cafephoto_form = CafePhotoForm(request.POST, request.FILES)
+            cafepos_form = CafePositionForm(request.POST)
 
-        cafe_init_data['user'] = request.user
+            if cafephoto_form.is_valid() and cafepos_form.is_valid():
+                cafephoto_form.save()
+                cafepos_form.save()
+                return redirect('main:cafe_list')
+            else:
+                context['cafe_form'] = cafe_form
+                if not cafephoto_form.is_valid():
+                    print("CafePhoto Form is Error..", cafephoto_form.errors)
+                    cafephoto_form.add_error(None, '이미지를 등록해주세요 !')
+                if not cafepos_form.is_valid():
+                    print("CafePosition Form is Error..", cafepos_form.errors)
+                    cafepos_form.add_error(None, '위치를 다시 확인해주세요 !')
+                context['cafephoto_form'] = cafephoto_form
+                context['cafepos_form'] = cafepos_form
+        else:
+            print("Cafe form is error", cafe_form)
+            cafe_form.add_error(None, '정보를 확인해주세요. !')
+            context['cafe_form'] = cafe_form
+            context['cafephoto_form'] = CafePhotoForm()
+            context['cafepos_form'] = CafePositionForm()
 
-        cafe_form = CafeForm(initial=cafe_init_data)
-
-        context = {
-            'cafe_form':cafe_form,
-            'cafephoto_formset':cafephoto_formset,
-            'cafepos_formset':cafepos_formset
-        }
-
-        return render(request, 'main/cafe_form.html', context)
+    return render(request, 'main/cafe_form.html', context)

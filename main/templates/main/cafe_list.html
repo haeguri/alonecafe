@@ -2,43 +2,33 @@
 {% load staticfiles %}
 
 {% block content %}
-{#    <div class="content-top">#}
-{#        #}
-{#    </div>#}
-    <div class="content-middle">
-        <div class="thumb-container">
-            {% for cafe in cafes %}
-                {% if forloop.first %}
-                    <div class="row">
-                {% endif %}
-                    <a class="cafe-thumbnail" data-id="{{ cafe.id }}">
-                        <div class="col-sm-12 col-md-6 col-lg-4">
-                            <div class="thumbnail">
-                                {% if cafe.photos.all.0.image.url %}
-                                    <img src="{{ cafe.photos.all.0.image.url }}">
-                                {% else %}
-                                    <img src="{% static 'imgs/no_img.png' %}">
-                                {% endif %}
-                                <div class="caption">
-                                    <h3>{{ cafe.name }}</h3>
-{#                                    <div class="subinfo">#}
-{#                                        {% if cafe.has_solo_table %}#}
-{#                                            <span class="cafe-tag">1인석 있음</span>#}
-{#                                        {% endif %}#}
-{#                                    </div>#}
-                                </div>
+    <div class="thumb-container">
+        {% for cafe in cafes %}
+            {% if forloop.first %}
+                <div class="row">
+            {% endif %}
+                <a class="cafe-thumbnail" data-id="{{ cafe.id }}">
+                    <div class="col-sm-12 col-md-6 col-lg-4">
+                        <div class="thumbnail">
+                            {% if cafe.photo.image.url %}
+                                <img src="{{ cafe.photo.image.url }}">
+                            {% else  %}
+                                <img src="{% static 'imgs/no_img.png' %}">
+                            {% endif %}
+                            <div class="caption">
+                                <h4>{{ cafe.name }}</h4>
                             </div>
                         </div>
-                    </a>
-                {% if forloop.counter|divisibleby:3 %}
                     </div>
-                    <div class="row">
-                {% endif %}
-                {% if forloop.last %}
-                    </div>
-                {% endif %}
-            {% endfor %}
-        </div>
+                </a>
+            {% if forloop.counter|divisibleby:3 %}
+                </div>
+                <div class="row">
+            {% endif %}
+            {% if forloop.last %}
+                </div>
+            {% endif %}
+        {% endfor %}
     </div>
 
     <!-- 카페 상세 Modal -->
@@ -46,60 +36,38 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <h4 class="modal-title" id="cafe-name"></h4>
-              <span class="cafe-tag">1인석 있음</span>
+              <div class="row">
+                  <div class="col-sm-12">
+                      <button type="button" class="btn btn-default btn-sm close-btn" data-dismiss="modal"  aria-label="Close"><i class="fa fa-times" aria-hidden="true"></i></button>
+                      <div class="only-owner">
+                        <span class="hidden user_id">{{ user.id }}</span>
+                        <a id="edit" class="btn btn-default btn-sm only-owner"><i class="fa fa-pencil"></i></a>
+                        <a id="delete" class="btn btn-danger btn-sm only-owner"><i class="fa fa-trash-o"></i></a>
+                      </div>
+                  </div>
+                  <div class="col-sm-12 col-md-6">
+                      <h4 class="modal-title" id="cafe-name"></h4>
+                  </div>
+                  <div class="col-sm-12 col-md-6 cafe-address">
+                      <i class="fa fa-tag" aria-hidden="true"></i><span id="cafe-address"></span>
+                  </div>
+              </div>
           </div>
           <div class="modal-body">
                 <div class="row">
-                    <div class="left-section col-sm-12 col-md-6 col-lg-7">
+                    <div class="col-sm-12 col-md-6">
                         <div class="detail-imgarea">
                             <img id="cafe-img" src="" alt=""/>
-                            <div class="detail-other-imgarea">
-                            </div>
-                        </div>
-                        <div class="detail-textarea">
-                            <p id="cafe-intro"></p>
                         </div>
                     </div>
-                    <div class="right-section col-sm-12 col-md-6 col-lg-5">
-                        <div class="detail-subinfoarea">
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td class="tlabel" colspan="3"><i class="fa fa-map-marker" aria-hidden="true"></i>위치</td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="3">
-                                            <div id="google-map"></div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="tlabel"><i class="fa fa-tag" aria-hidden="true"></i>주소</td>
-                                        <td colspan="2"><span id="cafe-address"></span></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="tlabel"><i class="fa fa-volume-down" aria-hidden="true"></i>분위기</td>
-                                        <td colspan="2"><span id="cafe-mood"></span></td>
-                                    </tr>
-{#                                    <tr>#}
-{#                                        <td class="tlabel"><i class="fa fa-clock-o" aria-hidden="true"></i>영업시간</td>#}
-{#                                        <td>평일</td>#}
-{#                                        <td><span id="cafe-week_hours"></span></td>#}
-{#                                    </tr>#}
-{#                                    <tr>#}
-{#                                        <td></td>#}
-{#                                        <td>토요일</td>#}
-{#                                        <td><span id="cafe-satur_hours"></span></td>#}
-{#                                    </tr>#}
-{#                                    <tr>#}
-{#                                        <td></td>#}
-{#                                        <td>일요일</td>#}
-{#                                        <td><span id="cafe-sun_hours"></span></td>#}
-{#                                    </tr>#}
-                                </tbody>
-                            </table>
+                    <div class="col-sm-12 col-md-6">
+                        <div id="google-map">
                         </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="detail-textarea">
+                        <p id="cafe-intro"></p>
                     </div>
                 </div>
             </div>

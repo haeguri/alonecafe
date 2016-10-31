@@ -17,10 +17,10 @@
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="{% url 'main:cafe_new' %}" class="white-font">추천하기</a></li>
                 {% if user.is_authenticated %}
-                    <li><a href="{% url 'account_profile' %}" class="white-font">{{ user.nickname }}</a></li>
-                    <li><a href="{% url 'account_logout' %}" class="white-font">로그아웃</a></li>
+                    <li><a href="{% url 'auth:user_profile' %}" class="white-font">{{ user.nickname }}</a></li>
+                    <li><a href="{% url 'auth:user_logout' %}" class="white-font">로그아웃</a></li>
                 {% else %}
-                    <li><a href="{% url 'account_login' %}" class="white-font">로그인</a></li>
+                    <li><a href="{% url 'auth:user_login' %}" class="white-font">로그인</a></li>
                 {% endif %}
             </ul>
         </div>

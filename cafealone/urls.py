@@ -19,11 +19,7 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^accounts/profile', 'authapp.views.profile', name='account_profile'),
-    url(r'^accounts/login', 'django.contrib.auth.views.login',
-                            {'template_name': 'account/login.html'},
-                            name='account_login'),
-    url(r'^accounts/logout', 'django.contrib.auth.views.logout', {'next_page':'/'}, name='account_logout'),
+    url(r'^auth/', include('authapp.urls', namespace='auth')),
     url(r'', include('main.urls', namespace='main')),
     url(r'^accounts/', include('allauth.urls')),
 ]

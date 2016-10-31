@@ -6,12 +6,13 @@
 
     {% get_providers as socialaccount_providers %}
 
-    {% if next %}
-        <h3>로그인 후 카페추천 !</h3>
-    {% else %}
-        <h3>로그인</h3>
-    {% endif %}
-
+    <h3 class="page-title">
+        {% if next %}
+            로그인이 필요한 기능입니다 !
+        {% else %}
+            로그인 !
+        {% endif %}
+    </h3>
     <hr/>
 
     <form action="{% url 'account_login' %}" method="post">

@@ -5,7 +5,8 @@ $(document).ready(function() {
     var marker = null;
 
     // 임시 초기값.
-    var cafe_pos = {lat:37.541, lng:126.986};
+    // NEW Page일 때 디폴트로 서울특별시 좌표값이 설정
+    var cafe_pos = {lat:37.566535, lng:126.97796919999996};
 
     var mapOptions = {
         center: {lat: cafe_pos.lat, lng: cafe_pos.lng},
@@ -22,7 +23,6 @@ $(document).ready(function() {
 
     /* Cafe Detail Modal */
     var cafe_detail_modal = $('#cafeDetailModal');
-    var cur_img = $('#cafe-img');
 
     $('.cafe-thumbnail').each(function() {
         $(this).click(function() {
@@ -31,36 +31,22 @@ $(document).ready(function() {
                 console.log("/cafe/[cafe_id] get success.. ", response);
                 $('#cafe-name').text(response.name);
                 $('#cafe-intro').text(response.intro);
-                $('#cafe-mood').text(response.mood);
-                $('#cafe-address').text(response.address);
+                var s_address = response.address.replace('대한민국 ', '');
+                $('#cafe-address').text(s_address);
+                if($('.user_id').text() == response.user) {
+                    $('.only-owner').css('display', 'inline-block');
+                    $('#edit').attr('href', '/cafe/' + response.id + '/edit/');
+                    $('#delete').attr('href', '/cafe/' + response.id + '/delete/');
+                }
+                else {
+                    $('.only-owner').css('display', 'none');
+                }
                 cafe_pos.lat = Number(response.pos.split(',')[0]);
                 cafe_pos.lng = Number(response.pos.split(',')[1]);
                 if (response.img_list.length !== 0) {
                     $('#cafe-img').attr('src', response.img_list[0]);
-                    var detail_other_imgarea = $('.detail-other-imgarea');
-                    detail_other_imgarea.empty();
-                    response.img_list.forEach(function(img) {
-                        detail_other_imgarea.append('<img src="' + img + '" alt="" />');
-                    });
-                    detail_other_imgarea.find('img').each(function() {
-                        $(this).click(function() {
-                            cur_img.css('opacity', 0);
-                            cur_img.attr('src', $(this).attr('src'));
-                            cur_img.on('load', function fadeInImg() {
-                                cur_img.css('opacity', Number(cur_img.css('opacity'))+0.05);
-                                if (cur_img.css('opacity') < 1) {
-                                    setTimeout(fadeInImg, 50);
-                                }
-                            });
-                        });
-                    });
                 } else {
                     $('#cafe-img').attr('src', '../static/imgs/no_img.png');
-                }
-                if(response.has_solo_table) {
-                    $('#myModal').find('.cafe-tag').css('display', 'inline-block');
-                } else {
-                    $('#myModal').find('.cafe-tag').css('display', 'none');
                 }
                 cafe_detail_modal.modal('show');
             }).fail(function(error) {
@@ -71,10 +57,15 @@ $(document).ready(function() {
 
     cafe_detail_modal.on('shown.bs.modal', function() {
         mapInitialize(cafe_pos);
+        marker = new google.maps.Marker({
+            position:cafe_pos,
+            map: googleMap
+        });
         // Modal 때문에 지도가 완벽하게 안나와서 한번 resizing 필요.
         google.maps.event.trigger(googleMap, 'resize');
     });
 
+    /* Cafe Form */
     var cafephoto_labels = $('.cafephoto-preview label');
 
     $('.label-wrapper').each(function() {
@@ -89,7 +80,6 @@ $(document).ready(function() {
                 $(this).find('.gray-box').css('display','none');
             }
         });
-
         $(this).find('i').on('click', function() {
             $(this).parent().find('input').val('');
             $(this).parent().find('label').css('background-image', '');
@@ -113,6 +103,10 @@ $(document).ready(function() {
                         $(cafephoto_labels[input_idx]).parent().addClass('img-loaded');
                     }
                     $(cafephoto_labels[input_idx]).css('background-image', 'url("'+src+'")');
+                    if(window.location.pathname.includes('edit')) {
+                        var newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?img=new';
+                        window.history.pushState({state:newUrl},'', newUrl);
+                    }
                 };
                 reader.readAsDataURL($(this)[0].files[0]);
             }
@@ -124,30 +118,40 @@ $(document).ready(function() {
         });
     });
 
-    /* Cafe Form */
-    mapInitialize(cafe_pos);
-    var geocoder = new google.maps.Geocoder();
+    var geocoder = null;
     var lat_input = null;
     var lng_input = null;
+
+    geocoder = new google.maps.Geocoder();
 
     function moveMapCenter(lat, lng) {
         mapOptions.center.lat= lat;
         mapOptions.center.lng = lng;
-
         lat_input.val(lat);
         lng_input.val(lng);
-
         googleMap.setCenter(mapOptions.center);
+        console.log("lat and lng :: " + lat_input.val() + ", " + lng_input.val());
     }
 
-    $('.cafe-form').ready(function() {
-        lat_input = $('#id_position-0-latitude');
-        lng_input = $('#id_position-0-longitude');
+    isElementLoaded($('.cafe-form'), function() {
+        mapInitialize(cafe_pos);
+
+        lat_input = $('#id_latitude');
+        lng_input = $('#id_longitude');
+
+        if($('#cur_img').text()) {
+            if(!$(cafephoto_labels[0]).parent().hasClass('img-loaded')) {
+                $(cafephoto_labels[0]).parent().addClass('img-loaded');
+            }
+            $(cafephoto_labels[0]).css('background-image', 'url("'+$('#cur_img').text()+'")');
+        }
+
         marker = new google.maps.Marker({
-            position:mapOptions.center,
+            position:mapOptions['center'],
             map: googleMap,
             draggable: true
         });
+
         marker.addListener('dragend', function(event) {
             moveMapCenter(event.latLng.lat(), event.latLng.lng());
             geocoder.geocode({
@@ -155,9 +159,9 @@ $(document).ready(function() {
             }, function(result) {
                 if(result.length !== 0) {
                     console.log(result);
-                    $('#map-cur-address').text(result[0].formatted_address);
+                    $('.map-add-input').val(result[0].formatted_address);
                 } else {
-                    $('#map-cur-address').text('검색된 주소가 없음.');
+                    $('.map-add-input').val("검색된 주소가 없음.");
                 }
             });
         });
@@ -170,28 +174,19 @@ $(document).ready(function() {
             }, function(result) {
                 if(result.length !== 0) {
                     console.log(result);
-                    $('#map-cur-address').text(result[0].formatted_address);
+                    $('.map-add-input').val(result[0].formatted_address);
                 } else {
-                    $('#map-cur-address').text('검색된 주소가 없음.');
+                    $('.map-add-input').val("검색된 주소가 없음.");
                 }
             });
         });
 
-        geocoder.geocode({
-           'address':'서울특별시'
-        }, function(result) {
-            if(result.length !== 0) {
-                moveMapCenter(result[0].geometry.location.lat(), result[0].geometry.location.lng());
-                marker.setPosition(mapOptions.center);
-            } else {
-                console.log('검색된 좌표값이 없음.');
-            }
-        });
-
+        moveMapCenter(mapOptions.center.lat, mapOptions.center.lng);
+        marker.setPosition(mapOptions.center);
 
         $('#map-search-btn').on('click', function() {
             geocoder.geocode({
-                'address':$(this).siblings().val()
+                'address':$(this).siblings("input").val()
             }, function(result) {
                 if(result.length !== 0) {
                     moveMapCenter(result[0].geometry.location.lat(), result[0].geometry.location.lng());
@@ -202,4 +197,33 @@ $(document).ready(function() {
             })
         });
     });
+
+    isElementLoaded($('.user-profile'), function() {
+        //var thumb_container = $('.thumb-container');
+        //var private_container = $('.private-info-container');
+        $('.private-cafes').show();
+        $('.private-infos').hide();
+        console.log("load");
+        $('.profile-tab li').each(function() {
+            $(this).on('click', function() {
+                if( !$(this).hasClass('active') ) {
+                    $(this).siblings().removeClass('active');
+                    $(this).addClass('active');
+                    var changed_tab = $(this).attr('data-tab');
+                    var hide_tab = $(this).siblings().attr('data-tab');
+                    console.log("Changed, HIde", changed_tab, hide_tab);
+                    $('.'+hide_tab).hide();
+                    $('.'+changed_tab).show();
+                }
+            });
+        })
+    });
+
+    function isElementLoaded(elements, cb) {
+        if (elements.length == 0) {
+            return
+        } else {
+            cb();
+        }
+    }
 });
