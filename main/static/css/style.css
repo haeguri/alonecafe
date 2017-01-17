@@ -25,36 +25,29 @@ h3.page-title {
     text-align: center;
 }
 
-@media (min-width: 992px) {
-    .container {
-        width: 900px;
-    }
-}
+.container { min-height: 90%; }
 
-.container {
-    min-height: 90%;
-}
+a.color-coffee { color: #6f4e37; }
+a.color-coffee:hover { color: #6f4e37; }
+a.color-coffee:visited { color: #6F4E37; }
 
 
 footer {
     text-align: center;
     border-top: solid 1px #d0d0d0;
-    background-color: #eeeeee;
+    background-color: #212121;
     width: 100%;
-    padding: 20px;
+    padding: 40px;
+    height: 100px;
 }
 
 footer p {
-    color: gray;
-}
-
-.cafephoto-preview {
-    margin-bottom: 50px;
+    color: #fff;
 }
 
 .cafephoto-preview .label-wrapper {
     width: 100%;
-    height: 250px;
+    height: 50vw;
     position: relative;
     -webkit-box-sizing: content-box;
     -moz-box-sizing: content-box;
@@ -70,6 +63,7 @@ footer p {
     display: block;
     width: 100%;
     background: none;
+    margin-bottom: 50px;
 }
 
 .my-form-group .text-area, .my-form-group .img-area {
@@ -81,7 +75,6 @@ footer p {
     width: 15%;
     float: left;
     padding: 6px 0;
-    text-align: center;
 }
 
 .inline.input-wrap input{
@@ -96,6 +89,12 @@ footer p {
 .input-wrap input, .input-wrap textarea {
     width: 85%;
     display: inline-block;
+}
+
+.cafe-form-content {
+    background-color: #fff;
+    padding: 15px;
+    border: solid 1px #b0bec5;
 }
 
 .cafe-form .my-form-group .input-wrap:nth-of-type(2) {
@@ -133,18 +132,20 @@ footer p {
         display: inline-block;
         width: 100%;
     }
+
+}
+
+@media (min-width: 1200px) {
+    .cafe-form-content {
+        padding-right: 100px;
+        padding-left: 100px;
+    }
 }
 
 #cafe-img {
     width: 100%;
-    height: auto;
-}
+    border: solid 1px #b0bec5;
 
-@media (min-width: 992px) {
-    #cafe-img {
-        height: 230px;
-        width: 100%;
-    }
 }
 
 .btn-wrapper {
@@ -161,8 +162,13 @@ footer p {
     background-color: #00592d !important;
 }
 
-.white-font {
-    color: #fff;
+nav {
+    background-color: #fff;
+    border-bottom: solid 1px #b3b3b3 !important;
+}
+
+body {
+    background-color: #e9ecef;
 }
 
 .navbar-brand {
@@ -186,12 +192,21 @@ footer p {
     border-radius: 20px;
 }
 
+.modal-header {
+    border: none !important;
+}
+
+.modal-dialog hr {
+    margin: 0 15px 0 15px;
+    border-top-color: #b0bec5;
+}
+
 .modal-header .modal-title {
     display: inline-block;
 }
 
-.detail-textarea {
-    padding: 20px;
+.modal-body > div {
+    margin-bottom: 20px;
 }
 
 .detail-titlearea h5{
@@ -222,6 +237,12 @@ footer p {
 
 .only-owner {
     float: right;
+}
+
+
+.cafe-thumbnail  .thumbnail {
+    border: solid 1px #b0bec5 !important;
+    padding: 0 !important;
 }
 
 .cafe-thumbnail .caption h4{
@@ -312,6 +333,7 @@ form.cafe-form .cafe-info div{
 }
 
 .label-wrapper label {
+    height: 100%;
     z-index: 10;
     width: 100%;
     height: inherit;
@@ -360,6 +382,7 @@ form.cafe-form .cafe-info div{
     margin-left: auto;
     margin-right: auto;
     max-width: 500px;
+    background-color: #fff;
 }
 
 .auth-container input {

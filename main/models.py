@@ -19,9 +19,9 @@ class Region(models.Model):
 
 class Cafe(models.Model):
     user = models.ForeignKey(User, related_name='cafes', null=False, blank=False)
-    name = models.CharField('카페 이름', max_length=20, blank=False, null=False)
+    name = models.CharField('이름', max_length=20, blank=False, null=False)
     address = models.CharField('위치', max_length=50, blank=False, null=False)
-    intro = models.TextField('추천이유', blank=False, null=False)
+    intro = models.TextField('소개', blank=False, null=False)
     created = models.DateTimeField('등록일', auto_now_add=True)
 
     def __str__(self):

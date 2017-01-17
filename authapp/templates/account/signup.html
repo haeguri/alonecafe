@@ -1,23 +1,35 @@
 {% extends 'account/base.html' %}
-
-
 {% block auth_content %}
-    <h3 class="page-title">이메일로 회원가입 !</h3>
-
-    <form action="{% url 'account_signup' %}" method="post">
+    <h3 class="page-title">회원가입</h3>
+    
+    <form action="{% url 'authapp:signup' %}" method="post" class="signup-form">
+        {% csrf_token %}
+        <div style="display: none"><input type="text" name="next" value="main:cafe_list"/></div>
         <div class="form-group">
-            <label for="email">이메일</label>
-            <input id="email" type="email" class="form-control" placeholder="my_email@domain">
+            {% if form.email.errors %}
+                {% for error in errors %}
+                    {{ error }}
+                {% endfor %}
+            {% endif %}
+            <label for="id_{{ form.email.name }}">{{ form.email.label }}</label>
+            <input id="id_{{ form.email.name }}" name="{{ form.email.name }}" type="email" class="form-control">
         </div>
         <div class="form-group">
-            <label for="password">비밀번호</label>
-            <input id="password" type="password" class="form-control" placeholder="password">
+            <label for="id_{{ form.username.name }}">{{ form.username.label }}</label>
+            <input id="id_{{ form.username.name }}" name="{{ form.username.name }}" type="text" class="form-control">
         </div>
         <div class="form-group">
-            <label for="password">비밀번호 확인</label>
-            <input id="password" type="password" class="form-control" placeholder="password">
+            <label for="id_{{ form.password1.name }}">{{ form.password1.label }}</label>
+            <input id="id_{{ form.password1.name }}" name="password1" type="password" class="form-control">
         </div>
-        <button class="btn btn-primary btn-lg btn-block" type="submit">회원가입</button>
+        <div class="form-group">
+            <label for="id_{{ form.password2.name }}">{{ form.password2.label }}</label>
+            <input type="password" class="form-control" name="{{ form.password2.name }}" id="id_{{ form.password2.name }}">
+        </div>
+        <div class="form-grop">
+            <input class="btn btn-default btn-lg btn-block" type="submit" value="회원가입">
+            <input class="btn btn-default btn-lg btn-block" type="reset" value="취소">
+        </div>
     </form>
 
 {% endblock %}

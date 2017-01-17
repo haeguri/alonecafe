@@ -42,33 +42,34 @@
                                 <p id="origin_img">{{ origin_img }}</p>
                             </div>
                         </div>
-{#                        {{ cafephoto_form.image.label_tag }}#}
-{#                        {% for cafephoto_form in cafephoto_formset %}#}
-{#                            <div class="label-wrapper">#}
-{#                                {{ cafephoto_form.image.label_tag }}#}
-{#                                <div class="gray-box"></div>#}
-{#                                <i class="fa fa-times fa-2x" aria-hidden="true"></i>#}
-{#                                {{ cafephoto_form.image }}#}
-{#                                <div class="hidden">#}
-{#                                    <p id="origin_img">{{ origin_img }}</p>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        {% endfor %}#}
                     </div>
                 </div>
                 <div class="text-area">
                     <div class="input-wrap">
                         <label for="id_{{ cafe_form.name.name }}">{{ cafe_form.name.label }}</label>
-                        <input class="form-control" id="id_{{ cafe_form.name.name }}" name="{{ cafe_form.name.name }}" value="{{ cafe_form.name.value }}" type="text" maxlength="20"/>
+                        {% if request.path != '/cafe/new/' %}
+                            <input class="form-control" id="id_{{ cafe_form.name.name }}" name="{{ cafe_form.name.name }}" value="{{ cafe_form.name.value }}" type="text" maxlength="20"/>
+                        {% else %}
+                            <input class="form-control" id="id_{{ cafe_form.name.name }}" name="{{ cafe_form.name.name }}" type="text" maxlength="20"/>
+                        {% endif %}
                     </div>
                     <div class="input-wrap">
                         <label for="id_{{ cafe_form.intro.name }}">{{ cafe_form.intro.label }}</label>
-                        <textarea class="form-control" name="{{ cafe_form.intro.name }}" id="id_{{ cafe_form.intro.name }}">{{ cafe_form.intro.value }}</textarea>
+                        {% if request.path != '/cafe/new/' %}
+                            <textarea class="form-control" name="{{ cafe_form.intro.name }}" id="id_{{ cafe_form.intro.name }}">{{ cafe_form.intro.value }}</textarea>
+                        {% else %}
+                            <textarea class="form-control" name="{{ cafe_form.intro.name }}" id="id_{{ cafe_form.intro.name }}"></textarea>
+                        {% endif %}
                     </div>
                     <div class="input-wrap inline">
                         <label for="id_{{ cafe_form.address.name }}">{{ cafe_form.address.label }}</label>
                         <div>
-                            <input class="map-add-input form-control" id="id_{{ cafe_form.address.name }}" name="{{ cafe_form.address.name }}" value="{{ cafe_form.address.value }}" type="text"/>
+                            {% if request.path != '/cafe/new/' %}
+                                <input class="map-add-input form-control" id="id_{{ cafe_form.address.name }}" name="{{ cafe_form.address.name }}" value="{{ cafe_form.address.value }}" type="text"/>
+                            {% else %}
+                                <input class="map-add-input form-control" id="id_{{ cafe_form.address.name }}" name="{{ cafe_form.address.name }}" type="text"/>
+                            {% endif %}
+
                             <button type="button" id="map-search-btn" class="btn btn-default">주소 검색</button>
                             <p class="text-success">카페의 주소를 검색해서 지도상의 위치를 확인하세요 !</p>
                         </div>

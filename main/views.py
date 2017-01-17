@@ -29,6 +29,7 @@ def cafe_edit(request, pk):
     cafe = Cafe.objects.get(id=pk)
     if cafe.user.id != request.user.id:
         return redirect('main:cafe_list')
+
     context = {}
 
     if request.method == 'GET':

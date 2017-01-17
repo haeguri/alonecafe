@@ -5,3 +5,4 @@ db.sqlite3
 .idea
 envset.sh
 upload_files
+local_settings.py

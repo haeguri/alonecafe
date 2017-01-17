@@ -19,9 +19,8 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^auth/', include('authapp.urls', namespace='auth')),
-    url(r'', include('main.urls', namespace='main')),
-    url(r'^accounts/', include('allauth.urls')),
+    url(r'^auth/', include('authapp.urls', namespace='authapp')),
+    url(r'^', include('main.urls', namespace='main')),
 ]
 
 from django.conf import settings

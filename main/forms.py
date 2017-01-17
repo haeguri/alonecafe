@@ -18,7 +18,7 @@ class CafePositionForm(forms.ModelForm):
         fields = '__all__'
 
 class CafeForm(forms.ModelForm):
-    intro = forms.CharField(label='카페 소개', max_length=500, widget=forms.Textarea(), error_messages={'required':'카페 소개'})
+    intro = forms.CharField(label='소개', max_length=500, widget=forms.Textarea(), error_messages={'required':'카페 소개'})
 
     class Meta:
         model = Cafe

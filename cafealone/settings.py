@@ -28,6 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+SITE_ID = 1
 
 # Application definition
 
@@ -41,10 +42,6 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'main',
     'authapp',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.facebook',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -78,19 +75,13 @@ TEMPLATES = [
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
 )
 
 AUTH_USER_MODEL = 'authapp.CustomUser'
 LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/auth/login'
+LOGOUT_URL = '/auth/logout'
 LOGOUT_REDIRECT_URL = '/'
-
-# all-auth package configuration
-SITE_ID = 1
-ACCOUNT_USER_MODEL_USERNAME_FIELD = 'nickname'
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 WSGI_APPLICATION = 'cafealone.wsgi.application'
 
@@ -138,10 +129,8 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
-
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'bower_components'),
@@ -157,3 +146,8 @@ try:
     GEOPOSITION_GOOGLE_MAPS_API_KEY = os.environ['GOOGLE_MAP_KEY']
 except:
     print("System environment variable 'GOOGLE_MAP_KEY' is required.")
+
+try:
+    from .local_settings import *
+except ImportError:
+    pass

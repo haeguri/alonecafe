@@ -22,12 +22,12 @@ $(document).ready(function() {
     }
 
     /* Cafe Detail Modal */
-    var cafe_detail_modal = $('#cafeDetailModal');
+    var $cafeDetailModals = $('#cafeDetailModal');
 
     $('.cafe-thumbnail').each(function() {
         $(this).click(function() {
             var cafe_id = $(this).attr('data-id');
-            $.get('/cafe/'+cafe_id, function( response ) {
+            $.get('/cafe/'+cafe_id, function(response) {
                 console.log("/cafe/[cafe_id] get success.. ", response);
                 $('#cafe-name').text(response.name);
                 $('#cafe-intro').text(response.intro);
@@ -48,14 +48,14 @@ $(document).ready(function() {
                 } else {
                     $('#cafe-img').attr('src', '../static/imgs/no_img.png');
                 }
-                cafe_detail_modal.modal('show');
+                $cafeDetailModals.modal('show');
             }).fail(function(error) {
                 console.log('/cafe/[cafe_id] get failed !!', error);
             });
         })
     });
 
-    cafe_detail_modal.on('shown.bs.modal', function() {
+    $cafeDetailModals.on('shown.bs.modal', function() {
         mapInitialize(cafe_pos);
         marker = new google.maps.Marker({
             position:cafe_pos,
@@ -66,7 +66,7 @@ $(document).ready(function() {
     });
 
     /* Cafe Form */
-    var cafephoto_labels = $('.cafephoto-preview label');
+    var $cafePhotoLabels = $('.cafephoto-preview label');
 
     $('.label-wrapper').each(function() {
         $(this).mouseenter(function(){
@@ -90,8 +90,8 @@ $(document).ready(function() {
     });
 
     $('.cafephoto-preview input').each(function(input_idx) {
-        $(this).on('change', function(){
-            //console.log("IMAGE UPLOADED ! ARG is" , arg);
+        $(this).on('change', function(arg){
+            // console.log("IMAGE UPLOADED ! ARG is" , $(this));
             if(window.FileReader) {
                 if (!$(this)[0].files[0].type.match(/image\//)) {
                     return;
@@ -99,10 +99,10 @@ $(document).ready(function() {
                 var reader = new FileReader();
                 reader.onload = function(e) {
                     var src = e.target.result;
-                    if(!$(cafephoto_labels[input_idx]).parent().hasClass('img-loaded')) {
-                        $(cafephoto_labels[input_idx]).parent().addClass('img-loaded');
+                    if(!$($cafePhotoLabels[input_idx]).parent().hasClass('img-loaded')) {
+                        $($cafePhotoLabels[input_idx]).parent().addClass('img-loaded');
                     }
-                    $(cafephoto_labels[input_idx]).css('background-image', 'url("'+src+'")');
+                    $($cafePhotoLabels[input_idx]).css('background-image', 'url("'+src+'")');
                     if(window.location.pathname.includes('edit')) {
                         var newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?img=new';
                         window.history.pushState({state:newUrl},'', newUrl);
@@ -133,17 +133,17 @@ $(document).ready(function() {
         console.log("lat and lng :: " + lat_input.val() + ", " + lng_input.val());
     }
 
-    isElementLoaded($('.cafe-form'), function() {
+    thisClassRendered('cafe-form', function() {
         mapInitialize(cafe_pos);
 
         lat_input = $('#id_latitude');
         lng_input = $('#id_longitude');
 
         if($('#cur_img').text()) {
-            if(!$(cafephoto_labels[0]).parent().hasClass('img-loaded')) {
-                $(cafephoto_labels[0]).parent().addClass('img-loaded');
+            if(!$($cafePhotoLabels[0]).parent().hasClass('img-loaded')) {
+                $($cafePhotoLabels[0]).parent().addClass('img-loaded');
             }
-            $(cafephoto_labels[0]).css('background-image', 'url("'+$('#cur_img').text()+'")');
+            $($cafePhotoLabels[0]).css('background-image', 'url("'+$('#cur_img').text()+'")');
         }
 
         marker = new google.maps.Marker({
@@ -198,32 +198,30 @@ $(document).ready(function() {
         });
     });
 
-    isElementLoaded($('.user-profile'), function() {
-        //var thumb_container = $('.thumb-container');
-        //var private_container = $('.private-info-container');
-        $('.private-cafes').show();
-        $('.private-infos').hide();
-        console.log("load");
-        $('.profile-tab li').each(function() {
-            $(this).on('click', function() {
-                if( !$(this).hasClass('active') ) {
-                    $(this).siblings().removeClass('active');
-                    $(this).addClass('active');
-                    var changed_tab = $(this).attr('data-tab');
-                    var hide_tab = $(this).siblings().attr('data-tab');
-                    console.log("Changed, HIde", changed_tab, hide_tab);
-                    $('.'+hide_tab).hide();
-                    $('.'+changed_tab).show();
-                }
-            });
-        })
-    });
+    //isElementLoaded($('.user-profile'), function() {
+    //    $('.private-cafes').show();
+    //    $('.private-infos').hide();
+    //    $('.profile-tab li').each(function() {
+    //        $(this).on('click', function() {
+    //            if( !$(this).hasClass('active') ) {
+    //                $(this).siblings().removeClass('active');
+    //                $(this).addClass('active');
+    //                var changed_tab = $(this).attr('data-tab');
+    //                var hide_tab = $(this).siblings().attr('data-tab');
+    //                console.log("Changed, HIde", changed_tab, hide_tab);
+    //                $('.'+hide_tab).hide();
+    //                $('.'+changed_tab).show();
+    //            }
+    //        });
+    //    })
+    //});
 
-    function isElementLoaded(elements, cb) {
-        if (elements.length == 0) {
-            return
+    function thisClassRendered(el_cls, callBack) {
+        var elements = document.getElementsByClassName(el_cls);
+        if(elements.length !== 0) {
+            callBack();
         } else {
-            cb();
+            return;
         }
     }
 });

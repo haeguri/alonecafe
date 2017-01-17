@@ -1,36 +1,29 @@
 {% extends 'account/base.html' %}
-{% load socialaccount %}
-{% providers_media_js %}
 
 {% block auth_content %}
-
-    {% get_providers as socialaccount_providers %}
-
     <h3 class="page-title">
         {% if next %}
-            로그인이 필요한 기능입니다 !
+            로그인이 필요합니다.
         {% else %}
-            로그인 !
+            로그인.
         {% endif %}
     </h3>
     <hr/>
-
-    <form action="{% url 'account_login' %}" method="post">
+    <form action="{% url 'authapp:login' %}" method="post">
         {% csrf_token %}
-        <div style="display: none"><input type="text" name="next" value="{{ next }}"/></div>
         <div class="form-group">
-            <label for="email">이메일</label>
+            <label for="email">이메일</label>a
             <input id="email" name="username" type="email" class="form-control" placeholder="my_email@domain">
         </div>
         <div class="form-group">
             <label for="password">비밀번호</label>
             <input id="password" name="password" type="password" class="form-control" placeholder="password">
         </div>
-        <button class="btn btn-default btn-lg btn-block" type="submit">로그인</button>
-        <a class="btn btn-default btn-lg btn-block" href="{% url 'account_signup' %}">이메일로 회원가입</a>
-        {% if socialaccount_providers %}
-            <a class="btn btn-default btn-lg btn-block fblogin" href="{% provider_login_url "facebook" %}">Facebook 로그인</a>
-        {% endif %}
+        <div class="form-group">
+            <input class="btn btn-default btn-block btn-lg" type="submit" value="로그인">
+            <input type="hidden" name="next" value="{{ next }}">
+        </div>
+        <a class="btn btn-default btn-lg btn-block" href="{% url 'authapp:signup' %}">이메일로 회원가입</a>
     </form>
 
 {% endblock %}
