@@ -4,7 +4,7 @@ from django.contrib.auth.models import (
 )
 
 class CustomUserManager(BaseUserManager):
-    def create_user(self, email, nickname, password=None):
+    def create_user(self, email, username, password=None):
         """
         Creates and saves a User with the given email, date of
         birth and password.
@@ -14,14 +14,14 @@ class CustomUserManager(BaseUserManager):
 
         user = self.model(
             email=self.normalize_email(email),
-            nickname=nickname,
+            username=username,
         )
 
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, nickname, password):
+    def create_superuser(self, email, username, password):
         """
         Creates and saves a superuser with the given email, date of
         birth and password.
@@ -29,7 +29,7 @@ class CustomUserManager(BaseUserManager):
         user = self.create_user(
             email,
             password=password,
-            nickname=nickname,
+            username=username,
         )
         user.is_admin = True
         user.save(using=self._db)
