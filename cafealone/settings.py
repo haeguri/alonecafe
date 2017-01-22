@@ -24,9 +24,9 @@ SECRET_KEY = '3*32(&ke2=urql4l(_r0-vw=)+&*gnv=qo)m5)++l32wcd8zmh'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['ec2-52-78-72-8.ap-northeast-2.compute.amazonaws.com']
 
 SITE_ID = 1
 
@@ -93,10 +93,10 @@ WSGI_APPLICATION = 'cafealone.wsgi.application'
 DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-            'NAME': 'mydb',                      # Or path to database file if using sqlite3.
+            'NAME': 'cafealone',                      # Or path to database file if using sqlite3.
             # The following settings are not used with sqlite3:
-            'USER': 'postgre',
-            'PASSWORD': '918647',
+            'USER': 'admin_cafealone',
+            'PASSWORD': os.environ['CAFEALONE_SET_1'],
             'HOST': 'localhost',                      # Empty for localhost through domain sockets or           '127.0.0.1' for localhost through TCP.
             'PORT': '',                      # Set to empty string for default.
         }
@@ -144,6 +144,8 @@ STATICFILES_DIRS = (
 
 STATIC_URL = '/static/'
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
 MEDIA_URL = '/uploads/'
 
 MEDIA_ROOT = 'upload_files'
@@ -154,6 +156,7 @@ except:
     print("System environment variable 'GOOGLE_MAP_KEY' is required.")
 
 try:
-    from .local_settings import *
+    from local_settings import *
+    print("local setting!!")
 except ImportError:
     pass

@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .forms import *
 from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponse
 import json
 
@@ -74,12 +75,18 @@ def cafe_edit(request, pk):
 
 @login_required(login_url='/auth/login')
 def cafe_delete(request, pk):
-    cafe = Cafe.objects.get(id=pk)
+    if request.method == 'DELETE':
+        cafe = Cafe.objects.get(id=pk)
 
-    if cafe.user.id == request.user.id:
+        if cafe.user.id != request.user.id:
+            return HttpResponse("잘못된 접근입니다.")
+
         cafe.delete()
+        response = {
+            'next_url':str(reverse_lazy('main:cafe_list'))
+        }
 
-    return redirect('main:cafe_list')
+        return HttpResponse(json.dumps(response), content_type='application/json')
 
 @login_required(login_url='/auth/login')
 def cafe_new(request):

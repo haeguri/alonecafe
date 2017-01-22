@@ -7,4 +7,5 @@ urlpatterns = [
     url(r'^cafe/new/$', views.cafe_new, name='cafe_new'),
     url(r'^cafe/(?P<pk>\d+)/edit/$', views.cafe_edit, name='cafe_edit'),
     url(r'^cafe/(?P<pk>\d+)/delete/$', views.cafe_delete, name='cafe_delete'),
+    # /cafe/_id_/delete/
 ]

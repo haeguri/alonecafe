@@ -69,14 +69,12 @@
                             {% else %}
                                 <input class="map-add-input form-control" id="id_{{ cafe_form.address.name }}" name="{{ cafe_form.address.name }}" type="text"/>
                             {% endif %}
-
-                            <button type="button" id="map-search-btn" class="btn btn-default">주소 검색</button>
-                            <p class="text-success">카페의 주소를 검색해서 지도상의 위치를 확인하세요 !</p>
+                            <button type="button" id="map-search-btn" class="btn btn-default">검색</button>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- 카페 주소 + Google map-->
+            <!-- Google map-->
             <div class="my-form-group google-map-wrapper">
                 <div id="google-map">
                 </div>

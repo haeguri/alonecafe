@@ -1,22 +1,53 @@
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+        }
+    }
+});
+
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+
+
+
 $(document).ready(function() {
     'use strict';
 
     var googleMap = null;
     var marker = null;
 
-    // 임시 초기값.
-    // NEW Page일 때 디폴트로 서울특별시 좌표값이 설정
-    var cafe_pos = {lat:37.566535, lng:126.97796919999996};
+    // 서울특별시 좌표
+    var seoul_pos =  {lat:37.566535, lng:126.97796919999996};
+    // var cafe_pos = {lat:seoul_pos.lat, lng:seoul_pos.lng};
 
     var mapOptions = {
-        center: {lat: cafe_pos.lat, lng: cafe_pos.lng},
+        center: {lat: 0.0, lng: 0.0},
         zoom: 14
     };
 
     function mapInitialize(position) {
         if(position !== null) {
-            mapOptions.center.lat = position.lat;
-            mapOptions.center.lng = position.lng;
+            mapOptions.center.lat = position.lat || seoul_pos.lat;
+            mapOptions.center.lng = position.lng || seoul_pos.lng;
             googleMap = new google.maps.Map(document.getElementById('google-map'), mapOptions);
         }
     }
@@ -36,13 +67,30 @@ $(document).ready(function() {
                 if($('.user_id').text() == response.user) {
                     $('.only-owner').css('display', 'inline-block');
                     $('#edit').attr('href', '/cafe/' + response.id + '/edit/');
-                    $('#delete').attr('href', '/cafe/' + response.id + '/delete/');
+                    // $('#delete').attr('href', '/cafe/' + response.id + '/delete/');
+                    $('#delete').click(function() {
+                        if(confirm("정말 삭제하시겠습니까?")) {
+                            $.ajax({
+                                url: '/cafe/'+response.id+'/delete/',
+                                type: 'DELETE',
+                                success: function(response) {
+                                    console.log("Response", response);
+                                    window.location.href = response.next_url;
+                                },
+                                error: function(error) {
+                                    console.log("Error, ", error);
+                                }
+                            })
+                        } else {
+                            return;
+                        }
+                    })
                 }
                 else {
                     $('.only-owner').css('display', 'none');
                 }
-                cafe_pos.lat = Number(response.pos.split(',')[0]);
-                cafe_pos.lng = Number(response.pos.split(',')[1]);
+                mapOptions.center.lat= Number(response.pos.split(',')[0]);
+                mapOptions.center.lng = Number(response.pos.split(',')[1]);
                 if (response.img_list.length !== 0) {
                     $('#cafe-img').attr('src', response.img_list[0]);
                 } else {
@@ -56,9 +104,10 @@ $(document).ready(function() {
     });
 
     $cafeDetailModals.on('shown.bs.modal', function() {
-        mapInitialize(cafe_pos);
+        mapInitialize(mapOptions.center);
+        console.log("current mapoption center", mapOptions.center);
         marker = new google.maps.Marker({
-            position:cafe_pos,
+            position:mapOptions.center,
             map: googleMap
         });
         // Modal 때문에 지도가 완벽하게 안나와서 한번 resizing 필요.
@@ -119,25 +168,27 @@ $(document).ready(function() {
     });
 
     var geocoder = null;
-    var lat_input = null;
-    var lng_input = null;
+    var $lat_input = null;
+    var $lng_input = null;
 
     geocoder = new google.maps.Geocoder();
 
     function moveMapCenter(lat, lng) {
-        mapOptions.center.lat= lat;
-        mapOptions.center.lng = lng;
-        lat_input.val(lat);
-        lng_input.val(lng);
+        lat = lat || seoul_pos.lat;
+        lng = lng || seoul_pos.lng;
+        mapOptions.center.lat=lat;
+        mapOptions.center.lng=lng;
+        $lat_input.val(lat);
+        $lng_input.val(lng);
         googleMap.setCenter(mapOptions.center);
-        console.log("lat and lng :: " + lat_input.val() + ", " + lng_input.val());
+        console.log("lat: " + $lat_input.val() + ", lng" + $lng_input.val());
     }
 
     thisClassRendered('cafe-form', function() {
-        mapInitialize(cafe_pos);
+        mapInitialize(mapOptions.center);
 
-        lat_input = $('#id_latitude');
-        lng_input = $('#id_longitude');
+        $lat_input = $('#id_latitude');
+        $lng_input = $('#id_longitude');
 
         if($('#cur_img').text()) {
             if(!$($cafePhotoLabels[0]).parent().hasClass('img-loaded')) {
@@ -180,8 +231,7 @@ $(document).ready(function() {
                 }
             });
         });
-
-        moveMapCenter(mapOptions.center.lat, mapOptions.center.lng);
+        moveMapCenter(parseFloat($lat_input.val()), parseFloat($lng_input.val()));
         marker.setPosition(mapOptions.center);
 
         $('#map-search-btn').on('click', function() {
