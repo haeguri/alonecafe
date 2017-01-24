@@ -26,6 +26,8 @@ SECRET_KEY = '3*32(&ke2=urql4l(_r0-vw=)+&*gnv=qo)m5)++l32wcd8zmh'
 
 DEBUG = False
 
+#DEBUG = True
+
 ALLOWED_HOSTS = ['ec2-52-78-72-8.ap-northeast-2.compute.amazonaws.com']
 
 SITE_ID = 1
@@ -42,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'main',
     'authapp',
+    
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -144,7 +147,7 @@ STATICFILES_DIRS = (
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_files/')
 
 MEDIA_URL = '/uploads/'
 
