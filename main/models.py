@@ -9,7 +9,7 @@ from PIL import Image
 IMAGE_SIZE = (1536, 1028)
 
 def get_upload_path(instance, filename):
-    return timezone.now().strftime("%y-%m-%d/") + instance.cafe.name + "/" + filename
+    return timezone.now().strftime("%y-%m-%d/") + "/cafe_" + str(instance.cafe.id) + "_photo/" + filename
 
 class Region(models.Model):
     city = models.CharField('광역시도', max_length=20)
