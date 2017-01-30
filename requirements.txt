@@ -1,6 +1,5 @@
 defusedxml==0.4.1
 Django==1.9
-django-geoposition==0.2.3
 gunicorn==19.6.0
 oauthlib==2.0.0
 Pillow==3.3.0
