@@ -4,6 +4,12 @@
 
  혼자 카페가는 걸 즐겨하는데, 좋은 카페 공유하고 싶어서 개발했습니다.
 
+## 테스트 계정
+
+email:test@cafealone.com 
+pw:12341234
+
+
 ## Requiements
 
 - Google Map API
