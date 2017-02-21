@@ -243,17 +243,18 @@ body {
     float: right;
 }
 
-
-.cafe-thumbnail  .thumbnail {
+.cafe-collections .cafe-card {
     border: solid 1px #b0bec5 !important;
     padding: 0 !important;
 }
 
-.cafe-thumbnail .caption h4{
+.cafe-collections .cafe-card .caption h4{
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
 }
+
+
 
 #cafeDetailModal .cafe-address {
     font-size: 18px;

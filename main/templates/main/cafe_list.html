@@ -2,22 +2,20 @@
 {% load staticfiles %}
 
 {% block content %}
-    <div class="thumb-container">
+    <div class="cafe-collections">
         {% for cafe in cafes %}
             {% if forloop.first %}
                 <div class="row">
             {% endif %}
-                <a class="cafe-thumbnail" data-id="{{ cafe.id }}">
-                    <div class="col-sm-12 col-md-6 col-lg-4">
-                        <div class="thumbnail">
-                            {% if cafe.photo.image.url %}
-                                <img src="{{ cafe.photo.image.url }}">
-                            {% else  %}
-                                <img src="{% static 'imgs/no_img.png' %}">
-                            {% endif %}
-                            <div class="caption">
-                                <h4>{{ cafe.name }}</h4>
-                            </div>
+                <a data-id="{{ cafe.id }}">
+                    <div class="cafe-card thumbnail col-sm-12 col-md-6 col-lg-4 ">
+                        {% if cafe.photo.image.url %}
+                            <img src="{{ cafe.photo.image.url }}">
+                        {% else  %}
+                            <img src="{% static 'imgs/no_img.png' %}">
+                        {% endif %}
+                        <div class="caption">
+                            <h4>{{ cafe.name }}</h4>
                         </div>
                     </div>
                 </a>

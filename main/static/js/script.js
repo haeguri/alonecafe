@@ -1,22 +1,9 @@
-function csrfSafeMethod(method) {
-    // these HTTP methods do not require CSRF protection
-    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-}
-$.ajaxSetup({
-    beforeSend: function(xhr, settings) {
-        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-        }
-    }
-});
-
 function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie != '') {
         var cookies = document.cookie.split(';');
         for (var i = 0; i < cookies.length; i++) {
             var cookie = jQuery.trim(cookies[i]);
-            // Does this cookie string begin with the name we want?
             if (cookie.substring(0, name.length + 1) == (name + '=')) {
                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                 break;
@@ -26,14 +13,18 @@ function getCookie(name) {
     return cookieValue;
 }
 
-
-
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!/^(GET|HEAD|OPTIONS|TRACE)$/.test(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+        }
+    }
+});
 
 $(document).ready(function() {
     'use strict';
 
-    var googleMap = null;
-    var marker = null;
+    var googleMap, marker;
 
     // 서울특별시 좌표
     var seoul_pos =  {lat:37.566535, lng:126.97796919999996};
@@ -55,9 +46,9 @@ $(document).ready(function() {
     /* Cafe Detail Modal */
     var $cafeDetailModals = $('#cafeDetailModal');
 
-    $('.cafe-thumbnail').each(function() {
+    $('.cafe-card').each(function() {
         $(this).click(function() {
-            var cafe_id = $(this).attr('data-id');
+            var cafe_id = $(this).parent().attr('data-id');
             $.get('/cafe/'+cafe_id, function(response) {
                 console.log("/cafe/[cafe_id] get success.. ", response);
                 $('#cafe-name').text(response.name);
@@ -67,7 +58,6 @@ $(document).ready(function() {
                 if($('.user_id').text() == response.user) {
                     $('.only-owner').css('display', 'inline-block');
                     $('#edit').attr('href', '/cafe/' + response.id + '/edit/');
-                    // $('#delete').attr('href', '/cafe/' + response.id + '/delete/');
                     $('#delete').click(function() {
                         if(confirm("정말 삭제하시겠습니까?")) {
                             $.ajax({
@@ -81,8 +71,6 @@ $(document).ready(function() {
                                     console.log("Error, ", error);
                                 }
                             })
-                        } else {
-                            return;
                         }
                     })
                 }
@@ -110,7 +98,7 @@ $(document).ready(function() {
             position:mapOptions.center,
             map: googleMap
         });
-        // Modal 때문에 지도가 완벽하게 안나와서 한번 resizing 필요.
+        // Modal 때문에 GoogleMap이 제대로 안나옴, 한번 resizing 필요.
         google.maps.event.trigger(googleMap, 'resize');
     });
 
@@ -247,23 +235,6 @@ $(document).ready(function() {
             })
         });
     });
-
-    //isElementLoaded($('.user-profile'), function() {
-    //    $('.private-cafes').show();
-    //    $('.private-infos').hide();
-    //    $('.profile-tab li').each(function() {
-    //        $(this).on('click', function() {
-    //            if( !$(this).hasClass('active') ) {
-    //                $(this).siblings().removeClass('active');
-    //                $(this).addClass('active');
-    //                var changed_tab = $(this).attr('data-tab');
-    //                var hide_tab = $(this).siblings().attr('data-tab');
-    //                console.log("Changed, HIde", changed_tab, hide_tab);
-    //                $('.'+hide_tab).hide();
-    //                $('.'+changed_tab).show();
-    //            }
-    //        });
-    //    })
     //});
 
     function thisClassRendered(el_cls, callBack) {
