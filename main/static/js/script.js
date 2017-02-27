@@ -24,38 +24,41 @@ $.ajaxSetup({
 $(document).ready(function() {
     'use strict';
 
-    var googleMap, marker;
+    var googleMap, marker,
+        seoulPos,
+        mapOptions,
+        $cafeDetailModal,
+        $cafePhotoLabels;
 
     // 서울특별시 좌표
-    var seoul_pos =  {lat:37.566535, lng:126.97796919999996};
-    // var cafe_pos = {lat:seoul_pos.lat, lng:seoul_pos.lng};
+    seoulPos =  {lat:37.566535, lng:126.97796919999996};
 
-    var mapOptions = {
+    mapOptions = {
         center: {lat: 0.0, lng: 0.0},
         zoom: 14
     };
 
     function mapInitialize(position) {
         if(position !== null) {
-            mapOptions.center.lat = position.lat || seoul_pos.lat;
-            mapOptions.center.lng = position.lng || seoul_pos.lng;
+            mapOptions.center.lat = position.lat || seoulPos.lat;
+            mapOptions.center.lng = position.lng || seoulPos.lng;
             googleMap = new google.maps.Map(document.getElementById('google-map'), mapOptions);
         }
     }
 
     /* Cafe Detail Modal */
-    var $cafeDetailModals = $('#cafeDetailModal');
+    $cafeDetailModal = $('#cafeDetailModal');
 
     $('.cafe-card').each(function() {
         $(this).click(function() {
-            var cafe_id = $(this).parent().attr('data-id');
-            $.get('/cafe/'+cafe_id, function(response) {
-                console.log("/cafe/[cafe_id] get success.. ", response);
+            var cafeId = $(this).parent().attr('data-id');
+
+            $.get('/cafe/'+cafeId, function(response) {
                 $('#cafe-name').text(response.name);
                 $('#cafe-intro').text(response.intro);
-                var s_address = response.address.replace('대한민국 ', '');
-                $('#cafe-address').text(s_address);
-                if($('.user_id').text() == response.user) {
+                $('#cafe-address').text(response.address.replace('대한민국 ', ''));
+
+                if(parseInt($('.user_id').text()) === response.user) {
                     $('.only-owner').css('display', 'inline-block');
                     $('#edit').attr('href', '/cafe/' + response.id + '/edit/');
                     $('#delete').click(function() {
@@ -84,14 +87,12 @@ $(document).ready(function() {
                 } else {
                     $('#cafe-img').attr('src', '../static/imgs/no_img.png');
                 }
-                $cafeDetailModals.modal('show');
-            }).fail(function(error) {
-                console.log('/cafe/[cafe_id] get failed !!', error);
+                $cafeDetailModal.modal('show');
             });
         })
     });
 
-    $cafeDetailModals.on('shown.bs.modal', function() {
+    $cafeDetailModal.on('shown.bs.modal', function() {
         mapInitialize(mapOptions.center);
         console.log("current mapoption center", mapOptions.center);
         marker = new google.maps.Marker({
@@ -103,7 +104,7 @@ $(document).ready(function() {
     });
 
     /* Cafe Form */
-    var $cafePhotoLabels = $('.cafephoto-preview label');
+    $cafePhotoLabels = $('.cafephoto-preview label');
 
     $('.label-wrapper').each(function() {
         $(this).mouseenter(function(){
@@ -128,7 +129,6 @@ $(document).ready(function() {
 
     $('.cafephoto-preview input').each(function(input_idx) {
         $(this).on('change', function(arg){
-            // console.log("IMAGE UPLOADED ! ARG is" , $(this));
             if(window.FileReader) {
                 if (!$(this)[0].files[0].type.match(/image\//)) {
                     return;
@@ -147,42 +147,36 @@ $(document).ready(function() {
                 };
                 reader.readAsDataURL($(this)[0].files[0]);
             }
-            /*
-            *
-            * IE???
-            *
-            * */
         });
     });
 
-    var geocoder = null;
-    var $lat_input = null;
-    var $lng_input = null;
-
-    geocoder = new google.maps.Geocoder();
+    var geocoder = new google.maps.Geocoder(),
+        $latInput, $lngInput;
 
     function moveMapCenter(lat, lng) {
-        lat = lat || seoul_pos.lat;
-        lng = lng || seoul_pos.lng;
+        lat = lat || seoulPos.lat;
+        lng = lng || seoulPos.lng;
         mapOptions.center.lat=lat;
         mapOptions.center.lng=lng;
-        $lat_input.val(lat);
-        $lng_input.val(lng);
+        $latInput.val(lat);
+        $lngInput.val(lng);
         googleMap.setCenter(mapOptions.center);
-        console.log("lat: " + $lat_input.val() + ", lng" + $lng_input.val());
+        console.log("lat: " + $latInput.val() + ", lng" + $lngInput.val());
     }
 
     thisClassRendered('cafe-form', function() {
         mapInitialize(mapOptions.center);
 
-        $lat_input = $('#id_latitude');
-        $lng_input = $('#id_longitude');
+        var $curImg = $('#cur_img');
 
-        if($('#cur_img').text()) {
+        $latInput = $('#id_latitude');
+        $lngInput = $('#id_longitude');
+
+        if($curImg.text()) {
             if(!$($cafePhotoLabels[0]).parent().hasClass('img-loaded')) {
                 $($cafePhotoLabels[0]).parent().addClass('img-loaded');
             }
-            $($cafePhotoLabels[0]).css('background-image', 'url("'+$('#cur_img').text()+'")');
+            $($cafePhotoLabels[0]).css('background-image', 'url("'+$curImg.text()+'")');
         }
 
         marker = new google.maps.Marker({
@@ -219,7 +213,8 @@ $(document).ready(function() {
                 }
             });
         });
-        moveMapCenter(parseFloat($lat_input.val()), parseFloat($lng_input.val()));
+
+        moveMapCenter(parseFloat($latInput.val()), parseFloat($lngInput.val()));
         marker.setPosition(mapOptions.center);
 
         $('#map-search-btn').on('click', function() {
@@ -235,14 +230,11 @@ $(document).ready(function() {
             })
         });
     });
-    //});
 
     function thisClassRendered(el_cls, callBack) {
         var elements = document.getElementsByClassName(el_cls);
         if(elements.length !== 0) {
             callBack();
-        } else {
-            return;
         }
     }
 });
